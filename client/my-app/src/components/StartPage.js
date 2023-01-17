@@ -30,13 +30,38 @@ const Register = () => {
     });
   };
 
+  const handleLoginSubmit = (event) => {
+    event.preventDefault();
+    axios
+      .post("http://localhost:3001/login", loginData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    window.location.href = "/userpage";
+  };
+
+  const handleRegisterSubmit = (event) => {
+    event.preventDefault();
+    axios
+      .post("http://localhost:3001/register", registerData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="body">
       <div className="container">
         <div className="left-side">
           <div className="login">
             <h2>Zaloguj się</h2>
-            <form>
+            <form onSubmit={handleLoginSubmit}>
               <input
                 type="text"
                 name="username"
@@ -75,7 +100,7 @@ const Register = () => {
           <h1 classname="h1">Dołącz do nas już dziś!</h1>
           <div className="register">
             <h2>Register</h2>
-            <form>
+            <form onSubmit={handleRegisterSubmit}>
               <input
                 type="text"
                 name="username"

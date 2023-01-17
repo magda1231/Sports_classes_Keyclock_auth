@@ -1,3 +1,3 @@
-# nazwa_projektu (Protokoły sieci Web)
+# Protokoły sieci Web
 
 Magdalena Makaro
