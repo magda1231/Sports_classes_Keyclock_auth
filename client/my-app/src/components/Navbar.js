@@ -1,4 +1,12 @@
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 export default function Navbar() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
   return (
     <div className="Navbar">
       <nav>
@@ -10,10 +18,12 @@ export default function Navbar() {
             <a href="logpage.html">Moje ćwiczenia</a>
           </li>
           <li>
-            <a href="/">Wyloguj się</a>
+            <button onClick={handleLogout} className="Logout">
+              Wyloguj się
+            </button>
           </li>
         </ul>
-        <div class="logo"></div>
+        <div className="logo"></div>
       </nav>
     </div>
   );

@@ -5,10 +5,12 @@ import UserPage from "./components/UserPage";
 import { NotFound } from "./components/NotFound";
 
 function App() {
+  const token = localStorage.getItem("token");
   return (
     <Routes>
       <Route path="/" element={<StartPage />} />
       <Route path="/userpage" element={<UserPage />} />
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
