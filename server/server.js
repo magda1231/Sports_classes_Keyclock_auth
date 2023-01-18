@@ -1,27 +1,98 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const neo4j = require("neo4j-driver");
+const jwt = require("jsonwebtoken");
+
 // ś
 const app = express();
 app.use(cors());
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const posts = [
+  { username: "Alan", password: "lol" },
+  { username: "Blan", password: "alan" },
+];
+const lista = [
+  {
+    name: "Pilates",
+    place: "Gym",
+    time: "12:00",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, incidunt quos consequatur aliquam veritatis, ut nam corrupti laborum doloribus minus pariatur cum praesentium itaque ad fugit, quidem possimus laudantium animi?",
+  },
+  {
+    name: "Yoga",
+    place: "Gym",
+    time: "12:00",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, incidunt quos consequatur aliquam veritatis, ut nam corrupti laborum doloribus minus pariatur cum praesentium itaque ad fugit, quidem possimus laudantium animi?",
+  },
+  {
+    name: "Yoga",
+    place: "Gym",
+    time: "12:00",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, incidunt quos consequatur aliquam veritatis, ut nam corrupti laborum doloribus minus pariatur cum praesentium itaque ad fugit, quidem possimus laudantium animi?",
+  },
+];
 
 app.use(bodyParser.json());
 
 app.post("/login", (req, res) => {
   console.log(req.body);
+
+  //correct user and password
+
+  const username = req.body.username;
+  if (username === "Alan" && req.body.password === "lol") {
+    const user = { username: req.body.username, password: req.body.password };
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+    res.json({ accessToken: accessToken });
+  } else {
+    res.sendStatus(403); // wrong user or password
+  }
+});
+
+app.post("/logout", (req, res) => {
+  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
+  res.sendStatus(204);
+});
+
+app.get("/userpage/classes", authenticateToken, (req, res) => {
+  const p2 = posts.filter((post) => post.username === req.body.username);
+  res.json(p2);
 });
 
 app.post("/register", (req, res) => {
   console.log(req.body);
 });
+app.get("/userpage", authenticateToken, (req, res) => {
+  console.log("aaaa", req.user);
+  res.send(lista);
 
-app.post("/addclass", (req, res) => {});
+  const p = posts.filter((x) => x.username === req.user.username);
+});
 
 app.listen(3003, () => {
   console.log("Server is running on port 3001");
 });
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401); //if there isn't any token
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); //if token is not valid
+    console.log(user);
+    req.user = user;
+    console.log(req.user);
+    next();
+  });
+}
 
 let driver = neo4j.driver(
   "neo4j+s://08b226e6.databases.neo4j.io",
@@ -42,7 +113,6 @@ const Register = async function (
   session.close();
 };
 //Register();
-
 const Login = async function () {
   let session = driver.session();
   console.log("SESSION");
@@ -79,7 +149,7 @@ const AddClass = async function (Class) {
   // session.close();
 };
 
-AddClass(Class);
+// AddClass(Class);
 
 const DeleteClass = async function (Class) {
   let session = driver.session();
