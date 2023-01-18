@@ -174,7 +174,20 @@ h1 {
 
 .Main {
   display: grid;
-  width: 80%;
+  width: 90%;
   margin: auto;
   grid-template-columns: 3fr 1fr;
+}
+
+.Class {
+  margin: 0.5rem;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(167, 162, 162, 0.186);
+}
+.Class p {
+  padding: 2rem;
 }/*# sourceMappingURL=styles.css.map */

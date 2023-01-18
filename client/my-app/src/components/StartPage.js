@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import ReactDOM from "react-dom/client";
+import { useNavigate } from "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const Register = () => {
@@ -30,23 +31,30 @@ const Register = () => {
     });
   };
 
+  const navigate = useNavigate();
+
   const handleLoginSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:3001/login", loginData)
+      .post("http://localhost:3003/login", loginData)
       .then((res) => {
-        console.log(res);
+        return res.data;
+      })
+      .then((data) => {
+        // console.log(data);
+        localStorage.setItem("token", data.accessToken);
+        navigate("/userpage");
       })
       .catch((err) => {
         console.log(err);
       });
-    window.location.href = "/userpage";
+    // window.location.href = "/userpage";
   };
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:3001/register", registerData)
+      .post("http://localhost:3003/register", registerData)
       .then((res) => {
         console.log(res);
       })
