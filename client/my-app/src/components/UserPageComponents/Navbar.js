@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 export default function Navbar() {
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    cookies.remove("token");
     navigate("/");
   };
   return (

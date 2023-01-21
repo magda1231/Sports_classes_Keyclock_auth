@@ -1,7 +1,7 @@
 import StartPage from "./components/StartPage";
 import "./styles.css";
 import { Routes, Route } from "react-router-dom";
-import UserPage from "./components/UserPage";
+import UserPage from "./components/UserPageComponents/UserPage.js";
 import { NotFound } from "./components/NotFound";
 
 function App() {

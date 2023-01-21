@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import ReactDOM from "react-dom/client";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import Cookies from "universal-cookie";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const Register = () => {
@@ -31,36 +34,46 @@ const Register = () => {
     });
   };
 
-  const navigate = useNavigate();
-
-  const handleLoginSubmit = (event) => {
-    event.preventDefault();
-    axios
-      .post("http://localhost:3003/login", loginData)
-      .then((res) => {
-        return res.data;
+  const fetchfunction = (endpoint, data) => {
+    console.log(`http://localhost:3003/${endpoint}`);
+    fetch(`http://localhost:3003/${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.ok) {
+          navigate("/userpage");
+          return response.json();
+        } else if (response.status == 403) {
+          setColor({ backgroundColor: "rgba(255, 86, 86, 0.495)" });
+        }
       })
       .then((data) => {
-        // console.log(data);
-        localStorage.setItem("token", data.accessToken);
-        navigate("/userpage");
+        console.log(data);
+        cookies.set("token", data);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        if (error.response.status == 403) {
+          console.log("ff");
+        }
+        // setColor({ backgroundColor: "rgba(255, 86, 86, 0.495)" });
       });
-    // window.location.href = "/userpage";
+  };
+
+  const [bgcolor, setColor] = useState(null);
+
+  const navigate = useNavigate();
+  // const [cookies, setCookie] = useCookies(["user"]);
+  const cookies = new Cookies();
+  const handleLoginSubmit = async (event) => {
+    event.preventDefault();
+    fetchfunction("login", loginData);
   };
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
-    axios
-      .post("http://localhost:3003/register", registerData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    fetchfunction("register", registerData);
   };
 
   return (
@@ -71,6 +84,9 @@ const Register = () => {
             <h2>Zaloguj się</h2>
             <form onSubmit={handleLoginSubmit}>
               <input
+                style={{
+                  bgcolor,
+                }}
                 type="text"
                 name="username"
                 id="username"
@@ -80,7 +96,7 @@ const Register = () => {
               <input
                 type="password"
                 name="password"
-                id="password"
+                id="loginpassword"
                 placeholder="PASSWORD"
                 onChange={handleLoginChange}
               />
@@ -105,7 +121,7 @@ const Register = () => {
           </div>
         </div>
         <div className="right-side">
-          <h1 classname="h1">Dołącz do nas już dziś!</h1>
+          <h1 className="h1">Dołącz do nas już dziś!</h1>
           <div className="register">
             <h2>Register</h2>
             <form onSubmit={handleRegisterSubmit}>
@@ -127,7 +143,7 @@ const Register = () => {
                 type="password"
                 name="password"
                 placeholder="HASŁO"
-                id="password"
+                id="registerpassword"
                 onChange={handleRegisterChange}
               />
               <select name="role" id="role" onChange={handleRegisterChange}>
