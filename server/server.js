@@ -5,14 +5,20 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const neo4j = require("neo4j-driver");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 
-// ś
 const app = express();
-app.use(cors());
-
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+    optionsSuccessStatus: 200,
+  })
+);
+// app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const posts = [
+const users = [
   { username: "Alan", password: "lol" },
   { username: "Blan", password: "alan" },
 ];
@@ -20,6 +26,8 @@ const lista = [
   {
     name: "Pilates",
     place: "Gym",
+    image:
+      "https://images.unsplash.com/photo-1671726805766-de50e4327182?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
     time: "12:00",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, incidunt quos consequatur aliquam veritatis, ut nam corrupti laborum doloribus minus pariatur cum praesentium itaque ad fugit, quidem possimus laudantium animi?",
@@ -41,40 +49,46 @@ const lista = [
 ];
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.post("/login", (req, res) => {
-  console.log(req.body);
-
-  //correct user and password
-
   const username = req.body.username;
   if (username === "Alan" && req.body.password === "lol") {
     const user = { username: req.body.username, password: req.body.password };
     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
     res.json({ accessToken: accessToken });
+    // res.cookie("token", accessToken, {
+    //   expires: new Date(Date.now() + 30000),
+    // });
+    // res.json("Token set in cookie");
   } else {
-    res.sendStatus(403); // wrong user or password
+    res.sendStatus(403);
+
+    // wrong user or password
   }
 });
 
 app.post("/logout", (req, res) => {
-  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
+  // refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
   res.sendStatus(204);
 });
 
-app.get("/userpage/classes", authenticateToken, (req, res) => {
-  const p2 = posts.filter((post) => post.username === req.body.username);
-  res.json(p2);
-});
-
 app.post("/register", (req, res) => {
-  console.log(req.body);
+  users.push(req.body);
+  const user = { username: req.body.username, password: req.body.password };
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+  res.json({ accessToken: accessToken });
+  // Register(
+  //   req.body.username,
+  //   req.body.name,
+  //   req.body.surname,
+  //   req.body.password,
+  //   req.body.email,
+  //   req.body.role
+  // );
 });
 app.get("/userpage", authenticateToken, (req, res) => {
-  console.log("aaaa", req.user);
-  res.send(lista);
-
-  const p = posts.filter((x) => x.username === req.user.username);
+  res.json(lista);
 });
 
 app.listen(3003, () => {
@@ -83,7 +97,9 @@ app.listen(3003, () => {
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
+  console.log(authHeader);
   const token = authHeader && authHeader.split(" ")[1];
+  console.log(token);
   if (token == null) return res.sendStatus(401); //if there isn't any token
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403); //if token is not valid
@@ -96,7 +112,7 @@ function authenticateToken(req, res, next) {
 
 let driver = neo4j.driver(
   "neo4j+s://08b226e6.databases.neo4j.io",
-  neo4j.auth.basic("neo4j", "")
+  neo4j.auth.basic("neo4j", "cg2rKSbSzfAUnZ0_JzEMR6e_Fs46qvQty3cUeK1ynPA")
 );
 const Register = async function (
   username,
@@ -113,18 +129,17 @@ const Register = async function (
   session.close();
 };
 //Register();
-const Login = async function () {
+const Login = async function (username, password) {
   let session = driver.session();
   console.log("SESSION");
-  const username = "alan";
-  const password = "haslo";
   const command = `MATCH (n:Users{username:'${username}', password:'${password}'}) RETURN n`;
   const matches = await session.run(command, {});
   session.close();
-  console.log(matches.records);
+  if (!matches) {
+    res.sendStatus(403);
+  }
   console.log("RESULT", !matches ? 0 : matches.records.length);
 };
-// Login();
 
 const Class = {
   name: "name",
