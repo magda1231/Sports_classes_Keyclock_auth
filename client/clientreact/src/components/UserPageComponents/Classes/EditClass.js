@@ -1,7 +1,7 @@
 import React, { useInsertionEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { editClass } from "../API_Actions";
+import { editClass } from "../../ActionsReducers/API_Actions";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { NotFound } from "../../NotFound";

@@ -19,13 +19,26 @@ body {
   align-content: center;
 }
 
+button {
+  border-radius: 30px;
+  background-color: #7eb77f;
+  color: white;
+  padding: 0.5rem;
+  font-size: 0.5rem;
+  border: none;
+  width: 5rem;
+}
+
 nav {
   width: 100%;
-  height: 50px;
+  height: 4rem;
+  padding-left: 1.5rem;
   background-color: #7eb77f;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
   display: flex;
   justify-content: space-between;
+  position: relative;
+  margin-bottom: 4rem;
 }
 nav ul {
   list-style-type: none;
@@ -39,9 +52,11 @@ nav ul {
   align-items: center;
   flex-direction: row;
 }
-nav ul a {
+nav ul a,
+nav ul button {
   text-transform: uppercase;
   letter-spacing: 0.02rem;
+  font-size: 1rem;
   color: black;
   background-color: rgba(128, 128, 128, 0.203);
   padding: 0.5rem;
@@ -53,11 +68,14 @@ nav ul a {
   width: -moz-max-content;
   width: max-content;
 }
-nav ul a:last-child {
+nav ul a:last-child,
+nav ul button:last-child {
   align-self: flex-end;
 }
 nav .logo {
   border-radius: 50%;
+  display: flex;
+  justify-self: flex-end;
   width: 30px;
   height: 30px;
   background-color: white;
@@ -67,7 +85,10 @@ nav .logo {
 }
 
 .container {
-  width: 70%;
+  width: 1000px;
+  min-width: -webkit-min-content;
+  min-width: -moz-min-content;
+  min-width: min-content;
   margin: auto;
   display: grid;
   justify-content: center;
@@ -98,16 +119,6 @@ nav .logo {
   padding: 2rem 0;
   font-size: 0.85rem;
   line-height: 1.1rem;
-}
-
-button {
-  border-radius: 30px;
-  background-color: #7eb77f;
-  color: white;
-  padding: 0.5rem;
-  font-size: 0.5rem;
-  border: none;
-  width: 5rem;
 }
 
 .register,
@@ -174,16 +185,15 @@ h1 {
 
 .Main {
   display: grid;
-  width: 90%;
+  width: 80%;
   margin: auto;
-  grid-template-columns: 3fr 1fr;
 }
 
 .Class {
-  margin: 0.5rem;
   padding: 2rem;
   border-radius: 30px;
   display: flex;
+  margin-bottom: 0.5rem;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
@@ -208,4 +218,108 @@ h1 {
 }
 .Class p {
   padding: 2rem;
+}
+
+.CreateClass form {
+  margin-top: 0;
+  width: 35rem;
+  background-color: rgba(128, 128, 128, 0.178);
+  box-shadow: rgba(10, 37, 64, 0.35) 0px 0px 10px 0px;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+.CreateClass form h1 {
+  margin: 1rem;
+  color: #f8378a;
+}
+.CreateClass form input {
+  padding: 0.2rem;
+  width: 12rem;
+  border-radius: 20px;
+  border: none;
+  color: rgba(71, 70, 70, 0.742);
+  border: 1px rgba(0, 0, 0, 0.199) solid;
+  margin-bottom: 1rem;
+}
+.CreateClass form textarea {
+  border-radius: 20px;
+  width: 12rem;
+  padding: 5px;
+}
+.CreateClass form button {
+  margin-bottom: 4rem;
+}
+
+.Trener {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  justify-content: space-around;
+  margin: auto;
+  margin-top: 2rem;
+  width: 90%;
+  grid-gap: 2rem;
+}
+
+button:active {
+  background-color: #668e67;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 30px;
+}
+
+.class_buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+.class_buttons button {
+  width: 10rem;
+  height: 2rem;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  font-size: 1rem;
+}
+
+.sort {
+  width: 100%;
+  height: 3.5rem;
+  display: flex;
+  justify-content: center;
+}
+.sort button {
+  background-color: rgba(52, 89, 149, 0.4392156863);
+  margin: 0.5rem 1rem;
+  width: 4rem;
+  font-size: 0.6rem;
+}
+
+#search {
+  width: 100%;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+  border: #345995 solid 1px;
+}
+
+.theme {
+  color: white;
+  border-radius: 20px;
+  border: none;
+  height: 2rem;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
 }/*# sourceMappingURL=styles.css.map */
