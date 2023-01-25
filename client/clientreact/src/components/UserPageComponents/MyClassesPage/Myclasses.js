@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ListClasses from "../Classes/ListClasses";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMyClasses } from "../API_Actions";
+// import { useTheme } from "../ThemeContext/ThemeContext";
 
 export default function MyClasses({ obj }) {
   const dispatch = useDispatch();
@@ -13,8 +14,18 @@ export default function MyClasses({ obj }) {
     dispatch(fetchMyClasses());
   }, [dispatch]);
 
+  // const { theme } = useTheme();
+
   return (
     <>
+      {/* <style>
+        {`
+        body{
+            background-color: ${theme === "light" ? "white" : "black"};
+            color: ${theme === "light" ? "black" : "white"};
+        }`}
+      </style> */}
+
       <Navbar />
 
       <div className="Trener">
