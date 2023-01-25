@@ -11,6 +11,12 @@ export default function UserPage() {
 
   return (
     <>
+      <style>
+        {`
+        body{
+          background-color: black;
+        }`}
+      </style>
       {token != null && <Navbar />}
       {token == null && navigate("/whopsnoaccess")}
       <div className="Main">

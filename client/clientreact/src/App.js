@@ -13,7 +13,7 @@ function App() {
       <Route path="/" element={<StartPage />} />
       <Route path="/userpage" element={<UserPage />} />
       <Route path="/myclasses" element={<MyClasses />} />
-      <Route path="/myclasses/:id" element={<EditClass />} />
+      <Route path="/myclasses/:id/:details" element={<EditClass />} />
       <Route path="/whopsnoaccess" element={<NotFound />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
