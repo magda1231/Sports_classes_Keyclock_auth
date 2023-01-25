@@ -6,6 +6,11 @@ const cors = require("cors");
 const neo4j = require("neo4j-driver");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+let driver = neo4j.driver(
+  "neo4j+s://08b226e6.databases.neo4j.io",
+  neo4j.auth.basic("neo4j", "cg2rKSbSzfAUnZ0_JzEMR6e_Fs46qvQty3cUeK1ynPA")
+);
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 app.use(
@@ -18,77 +23,106 @@ app.use(
 // app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const users = [
-  { username: "Alan", password: "lol" },
-  { username: "Blan", password: "alan" },
-];
-const lista = [
-  {
-    name: "Pilates",
-    place: "Gym",
-    image:
-      "https://images.unsplash.com/photo-1671726805766-de50e4327182?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-    time: "12:00",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, incidunt quos consequatur aliquam veritatis, ut nam corrupti laborum doloribus minus pariatur cum praesentium itaque ad fugit, quidem possimus laudantium animi?",
-  },
-  {
-    name: "Yoga",
-    place: "Gym",
-    time: "12:00",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, incidunt quos consequatur aliquam veritatis, ut nam corrupti laborum doloribus minus pariatur cum praesentium itaque ad fugit, quidem possimus laudantium animi?",
-  },
-  {
-    name: "Yoga",
-    place: "Gym",
-    time: "12:00",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat, incidunt quos consequatur aliquam veritatis, ut nam corrupti laborum doloribus minus pariatur cum praesentium itaque ad fugit, quidem possimus laudantium animi?",
-  },
-];
-
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.post("/login", (req, res) => {
   const username = req.body.username;
-  if (username === "Alan" && req.body.password === "lol") {
-    const user = { username: req.body.username, password: req.body.password };
-    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-    res.json({ accessToken: accessToken });
-    // res.cookie("token", accessToken, {
-    //   expires: new Date(Date.now() + 30000),
-    // });
-    // res.json("Token set in cookie");
-  } else {
-    res.sendStatus(403);
-
-    // wrong user or password
-  }
+  const password = req.body.password;
+  findPerson(username, password, res);
 });
+async function findPerson(personName, personPassword, res) {
+  let session = driver.session();
+  try {
+    const readQuery = `MATCH(p:User {username:'${personName}',password:'${personPassword}'}) RETURN p`;
+
+    const readResult = await session.executeRead((tx) => tx.run(readQuery));
+    if (readResult.records.length > 0) {
+      const user = { username: personName, password: personPassword };
+      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+      res.json({ accessToken: accessToken });
+    } else {
+      res.sendStatus(403);
+    }
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+    return false;
+  } finally {
+    await session.close();
+  }
+}
 
 app.post("/logout", (req, res) => {
-  // refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
   res.sendStatus(204);
 });
 
-app.post("/register", (req, res) => {
-  users.push(req.body);
-  const user = { username: req.body.username, password: req.body.password };
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-  res.json({ accessToken: accessToken });
-  // Register(
-  //   req.body.username,
-  //   req.body.name,
-  //   req.body.surname,
-  //   req.body.password,
-  //   req.body.email,
-  //   req.body.role
-  // );
+app.post("/register", async (req, res) => {
+  let session = driver.session();
+  const user = {
+    name: req.body.name,
+    surname: req.body.surname,
+    email: req.body.email,
+    role: req.body.role,
+    username: req.body.username,
+    password: req.body.password,
+  };
+  console.log(req.body);
+
+  try {
+    const checkUsername = `MATCH (p:User {username:'${user.username}'}) RETURN p`;
+    const usernameCheckResult = await session.executeRead((tx) =>
+      tx.run(checkUsername)
+    );
+    const checkEmail = `MATCH (p:User {email:'${user.email}'}) RETURN p`;
+    const userEmailCheck = await session.executeRead((tx) =>
+      tx.run(checkUsername)
+    );
+    if (
+      usernameCheckResult.records.length > 0 ||
+      userEmailCheck.records.length > 0
+    ) {
+      res.sendStatus(400);
+      return;
+    }
+
+    const readQuery = `CREATE (p:User{username:'${user.username}',password:'${user.password}', id:'${id}', name:'${user.name}', surname:'${user.surname}', email:'${user.email}' }) RETURN p`;
+    const readResult = await session.executeWrite((tx) => tx.run(readQuery));
+
+    const isok = await session.executeRead((tx) =>
+      tx.run("MATCH (n) RETURN n")
+    );
+
+    const usertokendata = {
+      username: user.username,
+      password: user.password,
+    };
+    const accessToken = jwt.sign(
+      usertokendata,
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    res.status(201).send({ accessToken: accessToken });
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+    return false;
+  } finally {
+    await session.close();
+  }
 });
+
 app.get("/userpage", authenticateToken, (req, res) => {
-  res.json(lista);
+  getAllClasses(res);
+});
+
+app.get("/myclasses", authenticateToken, (req, res) => {
+  getClasses(req.user.username, res);
+});
+app.put("/myclasses", authenticateToken, (req, res) => {
+  getClasses(req.user.username, res);
+});
+
+app.post("/createclass", authenticateToken, (req, res) => {
+  console.log(req.body);
+  createClass(req.user.username, req.body, res);
 });
 
 app.listen(3003, () => {
@@ -97,106 +131,120 @@ app.listen(3003, () => {
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
-  console.log(authHeader);
   const token = authHeader && authHeader.split(" ")[1];
-  console.log(token);
   if (token == null) return res.sendStatus(401); //if there isn't any token
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403); //if token is not valid
-    console.log(user);
+
     req.user = user;
-    console.log(req.user);
+
     next();
   });
 }
 
-let driver = neo4j.driver(
-  "neo4j+s://08b226e6.databases.neo4j.io",
-  neo4j.auth.basic("neo4j", "cg2rKSbSzfAUnZ0_JzEMR6e_Fs46qvQty3cUeK1ynPA")
-);
-const Register = async function (
-  username,
-  name,
-  surname,
-  email,
-  password,
-  role
-) {
+async function getClasses(user, res) {
   let session = driver.session();
-  console.log("SESSION");
-  const command = `CREATE(n:Users{username:'${username}', name:'${name}', surname:'${surname}', email:'${email}', password:'${password}', role:'${role}'}) RETURN n`;
-  await session.run(command, {});
-  session.close();
-};
-//Register();
-const Login = async function (username, password) {
-  let session = driver.session();
-  console.log("SESSION");
-  const command = `MATCH (n:Users{username:'${username}', password:'${password}'}) RETURN n`;
-  const matches = await session.run(command, {});
-  session.close();
-  if (!matches) {
-    res.sendStatus(403);
+  try {
+    const arr = [];
+    const readQuery = `MATCH (u:User {username: "${user}"})-[:CREATED]->(c:Class)RETURN c`;
+    const readResult = await session.executeRead((tx) => tx.run(readQuery));
+
+    const result = readResult.records.forEach((record) =>
+      arr.push(record.get(0).properties)
+    );
+
+    res.send(arr);
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+
+    return false;
+  } finally {
+    await session.close();
   }
-  console.log("RESULT", !matches ? 0 : matches.records.length);
-};
-
-const Class = {
-  name: "name",
-  place: { city: "city", street: "street", number: "number" },
-  date: "date",
-  time: "time",
-  description: "description",
-  teachername: "teachername",
-  aboutteacher: "aboutteacher",
-};
-
-const AddClass = async function (Class) {
-  console.log(Class);
+}
+async function createClass(user, classcreated, res) {
   let session = driver.session();
-  console.log("SESSION");
-  const command = `CREATE(m:Classes{name:'${Class.name}', place:'${Class.place}', date:'${Class.date}', time:'${Class.time}', description:'${Class.description}', teachername:'${Class.teachername}', aboutteacher:'${Class.aboutteacher}'})`;
-  await session.run(command, {});
-  const command2 = `MATCH (k:Classes{name:'${Class.name}', place:'${Class.place}', date:'${Class.date}', time:'${Class.time}', description:'${Class.description}', teachername:'${Class.teachername}', aboutteacher:'${Class.aboutteacher}'}) RETURN k`;
-  const matches = await session.run(command2, {});
-  console.log(matches.records[0].get(0).properties);
-  session.close();
-  // session.close();
-};
+  try {
+    const readcclass = `MATCH (u:Class {name: "${classcreated.name}"}) RETURN u`;
+    const checkclass = await session.executeRead((tx) => tx.run(readcclass));
+    if (checkclass.records.length > 0) {
+      res.sendStatus(400);
+      return false;
+    }
+    const id = uuidv4();
 
-// AddClass(Class);
+    const readQuery = `MATCH (u:User {username: "${user}"}) CREATE (u)-[:CREATED]->(c:Class {name: "${classcreated.name}",id:"${id}" ,city: "${classcreated.city}", place: "${classcreated.place}", time: "${classcreated.time}",date:"${classcreated.date}", description: "${classcreated.description}", price:"${classcreated.price}", image:"${classcreated.image}"}) RETURN c`;
+    const readResult = await session.executeWrite((tx) => tx.run(readQuery));
+    res.sendStatus(201);
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+    return false;
+  } finally {
+    await session.close();
+  }
+}
 
-const DeleteClass = async function (Class) {
+async function updateClass(user, classcreated, res) {
   let session = driver.session();
-  console.log("SESSION");
-  const command = `MATCH (n:Classes{name:'${Class.name}', place:'${Class.place}', date:'${Class.date}', time:'${Class.time}', description:'${Class.description}', teachername:'${Class.teachername}', aboutteacher:'${Class.aboutteacher}'}) DELETE n`;
-  await session.run(command, {});
-  session.close();
-};
+  try {
+    const readcclass = `MATCH (u:Class {name: "${classcreated.name}"}) RETURN u`;
+    const checkclass = await session.executeRead((tx) => tx.run(readcclass));
+    if (checkclass.records.length === 0) {
+      console.log("class does not exists");
+      res.sendStatus(400);
+      return false;
+    }
 
-const UpdateClass = async function (Class) {
-  let session = driver.session();
-  console.log("SESSION");
-  const command = `MATCH (n:Classes{name:'${Class.name}', place:'${Class.place}', date:'${Class.date}', time:'${Class.time}', description:'${Class.description}', teachername:'${Class.teachername}', aboutteacher:'${Class.aboutteacher}'}) SET n.name = 'nowa nazwa'`;
-  await session.run(command, {});
-  session.close();
-};
+    const readQuery = `MATCH (u:User)-[:CREATED]->(c:Class {name: "${classcreated.name}"}) SET c.place = "${classcreated.place}", c.time = "${classcreated.time}", c.description = "${classcreated.description}" RETURN c`;
+    const readResult = await session.executeWrite((tx) => tx.run(readQuery));
 
-const Get10Classes = async function () {
-  let session = driver.session();
-  console.log("SESSION");
-  const command = `MATCH (n:Classes) RETURN n LIMIT 10`;
-  const matches = await session.run(command, {});
-  session.close();
-  console.log(matches.records);
-  console.log("RESULT", !matches ? 0 : matches.records.length);
-};
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+    return false;
+  } finally {
+    await session.close();
+  }
+}
 
-const GetAllClasses = async function () {
+async function getAllClasses(res) {
   let session = driver.session();
-  console.log("SESSION");
-  const command = `MATCH (n:Classes) RETURN n`;
-  const matches = await session.run(command, {});
-  session.close();
-  console.log(matches.records);
-};
+  try {
+    const arr = [];
+
+    const readQuery = `MATCH (c:Class) RETURN c`;
+    const readResult = await session.executeRead((tx) => tx.run(readQuery));
+
+    const result = readResult.records.forEach((record) =>
+      arr.push(record.get(0).properties)
+    );
+    res.send(arr);
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+
+    return false;
+  } finally {
+    await session.close();
+  }
+}
+
+async function deleteClass(user, classcreated, res) {
+  let session = driver.session();
+  try {
+    const readcclass = `MATCH (u:Class {name: "${classcreated.name}"}) RETURN u`;
+    const checkclass = await session.executeRead((tx) => tx.run(readcclass));
+    if (checkclass.records.length === 0) {
+      res.sendStatus(400);
+      return false;
+    }
+    const readQuery = `MATCH (u:User)-[:CREATED]->(c:Class {name: "${classcreated.name}"}) DETACH DELETE c`;
+    const readResult = await session.executeWrite((tx) => tx.run(readQuery));
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+    return false;
+  } finally {
+    await session.close();
+  }
+}
