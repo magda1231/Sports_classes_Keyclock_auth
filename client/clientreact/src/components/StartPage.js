@@ -1,11 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-import ReactDOM from "react-dom/client";
 import { useNavigate } from "react-router-dom";
-// import { useCookies } from "react-cookie";
 import Cookies from "universal-cookie";
-
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const Register = () => {
   const [loginData, setLoginData] = useState({
@@ -34,6 +29,8 @@ const Register = () => {
     });
   };
 
+  const [bgcolor, setColor] = useState({ backgroundColor: "white" });
+
   const fetchfunction = (endpoint, data) => {
     console.log(`http://localhost:3003/${endpoint}`);
     fetch(`http://localhost:3003/${endpoint}`, {
@@ -47,21 +44,21 @@ const Register = () => {
           return response.json();
         } else if (response.status == 403) {
           setColor({ backgroundColor: "rgba(255, 86, 86, 0.495)" });
+          console.log(bgcolor);
+          return;
         }
       })
       .then((data) => {
-        console.log(data);
-        cookies.set("token", data);
+        data && cookies.set("token", data);
       })
       .catch((error) => {
-        if (error.response.status == 403) {
-          console.log("ff");
-        }
+        // if (error.response.status == 403) {
+        //   console.log("ff");
+        // }
+        console.log(error);
         // setColor({ backgroundColor: "rgba(255, 86, 86, 0.495)" });
       });
   };
-
-  const [bgcolor, setColor] = useState(null);
 
   const navigate = useNavigate();
   // const [cookies, setCookie] = useCookies(["user"]);
