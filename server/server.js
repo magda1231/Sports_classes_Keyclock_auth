@@ -84,7 +84,7 @@ app.post("/register", async (req, res) => {
       res.sendStatus(400);
       return;
     }
-
+    const id = uuidv4();
     const readQuery = `CREATE (p:User{username:'${user.username}',password:'${user.password}', id:'${id}', name:'${user.name}', surname:'${user.surname}', email:'${user.email}' }) RETURN p`;
     const readResult = await session.executeWrite((tx) => tx.run(readQuery));
 
