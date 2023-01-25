@@ -1,21 +1,42 @@
 import { useEffect, useState } from "react";
-// import { AuthenticatePOST } from "./Authenticate";
 import Cookies from "universal-cookie";
 
 export default function CreateClass() {
   const [classinfo, setClassinfo] = useState({});
   const [classmade, setClassmade] = useState(null);
+  const [image, setImage] = useState(null);
 
   const handleChange = (e) => {
-    setClassinfo({
-      ...classinfo,
-      [e.target.name]: e.target.value,
-    });
+    console.log(classinfo);
+    if (e.target.name == "image") {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      console.log(file.size);
+      if (file.size > 60000) {
+        alert("Zdjęcie jest za duże, zmień je na mniejsze!");
+        return;
+      }
+      reader.onload = () => {
+        const img = new Image();
+        img.src = reader.result;
+        setClassinfo({
+          ...classinfo,
+          image: img.src,
+        });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setClassinfo({
+        ...classinfo,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const handleSubmit = (e) => {
     const cookies = new Cookies();
     const token = cookies.get("token");
+    console.log(classinfo);
 
     e.preventDefault();
     fetch(`http://localhost:3003/createclass`, {
@@ -29,22 +50,19 @@ export default function CreateClass() {
       .then((res) => {
         if (res.status != 201) {
           alert("Zajęcia nie zostały stworzone zmień nazwę!");
+        } else if (res.status == 413) {
+          console.log(res.status);
+          alert("Zdjęcie ma zbyt duza wielkość, zmień je na mniejsze!");
         } else {
-          alert("Zajęcia zostały stworzone");
+          alert("Zajęcia zostały stworzone odswież stronę!");
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  //   useEffect(() => {
-  //     // if (classmade) {
-  //     //   alert("Zajęcia zostały stworzone");
-  //     // } else {
-  //     //   alert("Zajęcia nie zostały stworzone zmień nazwę!");
-  //     }
-  //   }, [handleSubmit]);
+  //get todays date
+  const today = new Date();
 
   return (
     <div className="CreateClass">
@@ -58,17 +76,25 @@ export default function CreateClass() {
           id="description"
           cols="30"
           rows="10"
+          onChange={handleChange}
         ></textarea>
         <label>Cena</label>
         <input type="text" name="price" id="price" onChange={handleChange} />
+
         <label>Miasto</label>
         <input type="text" name="city" id="city" onChange={handleChange} />
         <label>Miejsce</label>
         <input type="text" name="place" id="place" onChange={handleChange} />
         <label>Data</label>
-        <input type="text" name="date" id="date" onChange={handleChange} />
+        <input
+          type="date"
+          min={new Date()}
+          name="date"
+          id="date"
+          onChange={handleChange}
+        />
         <label>Godzina</label>
-        <input type="text" name="time" id="time" onChange={handleChange} />
+        <input type="time" name="time" id="time" onChange={handleChange} />
         <label>Czas trwania</label>
         <input
           type="text"
@@ -88,7 +114,15 @@ export default function CreateClass() {
           onChange={handleChange}
         />
         <label>Zdjęcie</label>
-        <input type="file" name="image" id="image" onChange={handleChange} />
+        <input
+          type="file"
+          name="image"
+          id="image"
+          accept="image/*"
+          onChange={handleChange}
+        />
+
+        {/* <img width="50px" height="50px" src={URL.} /> */}
         <button type="submit" id="button">
           Dodaj zajęcia
         </button>
