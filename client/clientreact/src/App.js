@@ -1,5 +1,5 @@
-import StartPage from "./components/StartPage";
-import "./styles.css";
+import StartPage from "./components/StartPage/StartPage";
+import "./style/styles.css";
 import { Routes, Route } from "react-router-dom";
 import UserPage from "./components/UserPageComponents/UserPage.js";
 import { NotFound } from "./components/NotFound";

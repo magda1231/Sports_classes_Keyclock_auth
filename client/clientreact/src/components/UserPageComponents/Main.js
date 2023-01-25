@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import ListClasses from "./Classes/ListClasses";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchMain } from "./API_Actions";
+import { fetchMain } from "../ActionsReducers/API_Actions";
 
 export default function Main() {
   const state = useSelector((state) => state);
