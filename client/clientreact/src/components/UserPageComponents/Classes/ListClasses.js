@@ -61,16 +61,17 @@ const ListProducts = ({ lista }) => {
 
   return (
     <>
-      <input
-        id="search"
-        type="text"
-        onChange={(e) => {
-          e.preventDefault();
-          setSearchQuery(e.target.value);
-        }}
-        placeholder="Search by name, place, city, category or date"
-      />
-
+      {sortedList.length != 0 && (
+        <input
+          id="search"
+          type="text"
+          onChange={(e) => {
+            e.preventDefault();
+            setSearchQuery(e.target.value);
+          }}
+          placeholder="Search by name, place, city, category or date"
+        />
+      )}
       <div className="sort">{sortedList.length != 0 && buttons}</div>
       {sortedList.map((x, el) => (
         <Class obj={x} key={el} />
