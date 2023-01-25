@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Delete from "./Delete";
 import EditClass from "./EditClass";
 
 export default function Class({ obj }) {
+  console.log(obj.id);
   return (
     <div className="Class">
       {obj.image !== "undefined" ? (
@@ -22,13 +24,11 @@ export default function Class({ obj }) {
 
       {window.location.pathname == "/myclasses" && (
         <div className="class">
-          {/* <a href="">
-            {obj.id && (
-              // <Link to={`/myclasses/${obj.id.toString()}`}>
-              //   Zaktualizuj dane
-              // </Link>
-            )}
-          </a> */}
+          {obj.id && (
+            <Link to={`/myclasses/${obj.id}/${obj}`}>Zaktualizuj dane</Link>
+          )}
+
+          <Delete id={obj.id} />
         </div>
       )}
     </div>
