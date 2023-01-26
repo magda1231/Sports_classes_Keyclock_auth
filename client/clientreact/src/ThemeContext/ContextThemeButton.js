@@ -6,7 +6,7 @@ const ContextThemeButton = (props) => {
 
   return (
     <button
-      class="theme"
+      className="theme"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
       {theme === "light" ? "🌙" : "☀️ "}

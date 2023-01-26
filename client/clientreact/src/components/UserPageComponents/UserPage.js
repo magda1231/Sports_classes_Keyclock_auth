@@ -6,11 +6,14 @@ import Aside from "./Aside";
 import { useEffect, useState } from "react";
 import { useTheme } from "../../ThemeContext/ThemeContext";
 import ContextThemeButton from "../../ThemeContext/ContextThemeButton";
+// import useAuth from "../../Hooks/useAuth";
 
 export default function UserPage() {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const token = cookies.get("token");
+
+  // const { username, isUser, isAdmin } = useAuth();
 
   const { theme, setTheme } = useTheme();
   useEffect(() => {
@@ -19,6 +22,9 @@ export default function UserPage() {
 
   return (
     <>
+      {/* {isUser && <div>User</div>}
+      {isAdmin && <div>Admin</div>} */}
+
       <style>
         {`
         body{

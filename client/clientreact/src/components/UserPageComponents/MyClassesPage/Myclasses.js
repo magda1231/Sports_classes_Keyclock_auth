@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ListClasses from "../Classes/ListClasses";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMyClasses } from "../../ActionsReducers/API_Actions";
+import Delete from "../Classes/Delete";
 // import { useTheme } from "../ThemeContext/ThemeContext";
 
 export default function MyClasses({ obj }) {
@@ -12,7 +13,7 @@ export default function MyClasses({ obj }) {
   const { myClasses, error, loading } = useSelector((state) => state);
   useEffect(() => {
     dispatch(fetchMyClasses());
-  }, [dispatch]);
+  }, [dispatch, Delete]);
 
   return (
     <>

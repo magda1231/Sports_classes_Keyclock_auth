@@ -5,7 +5,6 @@ export const useTheme = () => useContext(ThemeContext);
 
 function ThemeProvider({ children }) {
   const [theme, setTheme] = useState("light");
-  console.log("provider", theme);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
