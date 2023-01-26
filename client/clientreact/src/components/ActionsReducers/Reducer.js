@@ -19,7 +19,7 @@ const handleAsync = (builder, asyncThunk, property) => {
     })
     .addCase(asyncThunk.rejected, (state, action) => {
       state.loading = false;
-      console.log(action);
+
       state.error = action.error.message;
     });
 };

@@ -1,12 +1,17 @@
 import Class from "./Class";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 
 const ListProducts = ({ lista }) => {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    sortedList.length != 0 && inputRef.current.focus();
+  }, []);
+
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchQuery, setSearchQuery] = useState("");
 
-  console.log(lista);
   const handleSortClick = (sortCriteria) => {
     setSortBy(sortCriteria);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -30,18 +35,23 @@ const ListProducts = ({ lista }) => {
       } else {
         return filteredList.sort((a, b) => new Date(b.date) - new Date(a.date));
       }
-    } else if (sortBy === "name") {
+    } else if (
+      sortBy === "name" ||
+      sortBy === "category" ||
+      sortBy === "place" ||
+      sortBy === "city"
+    ) {
       if (sortOrder === "asc") {
         return filteredList.sort((a, b) => a.name.localeCompare(b.name));
       } else {
         return filteredList.sort((a, b) => b.name.localeCompare(a.name));
       }
-    } else if (sortBy === "city") {
-      if (sortOrder === "asc") {
-        return filteredList.sort((a, b) => a.city.localeCompare(b.city));
-      } else {
-        return filteredList.sort((a, b) => b.city.localeCompare(a.city));
-      }
+      // } else if (sortBy === "city") {
+      //   if (sortOrder === "asc") {
+      //     return filteredList.sort((a, b) => a.city.localeCompare(b.city));
+      //   } else {
+      //     return filteredList.sort((a, b) => b.city.localeCompare(a.city));
+      //   }
     }
   }, [sortBy, sortOrder, lista, searchQuery]);
 
@@ -65,6 +75,7 @@ const ListProducts = ({ lista }) => {
         <input
           id="search"
           type="text"
+          ref={inputRef}
           onChange={(e) => {
             e.preventDefault();
             setSearchQuery(e.target.value);

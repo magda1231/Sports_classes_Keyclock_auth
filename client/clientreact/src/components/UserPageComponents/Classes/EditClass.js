@@ -5,94 +5,17 @@ import { editClass } from "../../ActionsReducers/API_Actions";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { NotFound } from "../../NotFound";
+import { useLocation } from "react-router-dom";
 
-const EditClass = ({ user }) => {
-  console.log(user);
-  const [classInfo, setClassInfo] = useState(user);
-  const { id } = useParams();
-  return <div>O to id : {id}</div>;
+const EditClass = () => {
+  //   const location = useLocation();
+  //   const some = location.state;
+  //   console.log(some);
+
+  //   const { id } = useParams();
+  //   const search = window.location.pathname.split("/")[3];
+  //
+
+  return;
 };
 export default EditClass;
-//   if (!/^\d$/g.test(id)) return NotFound();
-
-//   //   useEffect(() => {}, []);
-
-//   const handleChange = (e) => {
-//     e.preventDefault();
-//     setClassInfo({ ...classInfo, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     // dispatch(editClass(classInfo));
-//     // navigate("/myclasses");
-//   };
-
-//   return (
-//     <div className="CreateClass">
-//       <form onSubmit={handleSubmit}>
-//         <h1>Stwórz zajęcia!</h1>
-//         <label>Nazwa zajęć</label>
-//         <input type="text" name="name" id="name" onChange={handleChange} />
-//         <label>Opis zajęć</label>
-//         <textarea
-//           name="description"
-//           id="description"
-//           cols="30"
-//           rows="10"
-//           value={user.description}
-//           onChange={handleChange}
-//         ></textarea>
-//         <label>Cena</label>
-//         <input type="text" name="price" id="price" onChange={handleChange} />
-
-//         <label>Miasto</label>
-//         <input type="text" name="city" id="city" onChange={handleChange} />
-//         <label>Miejsce</label>
-//         <input type="text" name="place" id="place" onChange={handleChange} />
-//         <label>Data</label>
-//         <input
-//           type="date"
-//           min={new Date()}
-//           name="date"
-//           id="date"
-//           onChange={handleChange}
-//         />
-//         <label>Godzina</label>
-//         <input type="time" name="time" id="time" onChange={handleChange} />
-//         <label>Czas trwania</label>
-//         <input
-//           type="text"
-//           name="duration"
-//           id="duration"
-//           onChange={handleChange}
-//         />
-//         <label> Maksymalna liczba uczestników</label>
-//         <input type="text" name="max" id="max" onChange={handleChange} />
-//         <label>Minimalna liczba uczestników</label>
-//         <input type="text" name="min" id="min" onChange={handleChange} />
-//         <label>Kategoria</label>
-//         <input
-//           type="text"
-//           name="category"
-//           id="category"
-//           onChange={handleChange}
-//         />
-//         <label>Zdjęcie</label>
-//         <input
-//           type="file"
-//           name="image"
-//           id="image"
-//           accept="image/*"
-//           onChange={handleChange}
-//         />
-
-//         <button type="submit" id="button">
-//           Dodaj zajęcia
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default EditClass;

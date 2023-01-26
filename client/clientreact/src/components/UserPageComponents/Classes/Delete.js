@@ -4,7 +4,6 @@ export default function Delete(props) {
   const cookies = new Cookies();
   const token = cookies.get("token");
 
-  console.log("id", props.id);
   const handleDelete = () => {
     fetch(`http://localhost:3003/myclasses`, {
       method: "DELETE",

@@ -4,7 +4,6 @@ import Delete from "./Delete";
 import EditClass from "./EditClass";
 
 export default function Class({ obj }) {
-  console.log(obj.id);
   return (
     <div className="Class">
       {obj.image !== "undefined" ? (
@@ -24,10 +23,7 @@ export default function Class({ obj }) {
 
       {window.location.pathname == "/myclasses" && (
         <div className="class">
-          {obj.id && (
-            <Link to={`/myclasses/${obj.id}/${obj}`}>Zaktualizuj dane</Link>
-          )}
-
+          {obj.id && <Link to={`/myclasses/${obj.id}`}>Zaktualizuj dane</Link>}
           <Delete id={obj.id} />
         </div>
       )}
