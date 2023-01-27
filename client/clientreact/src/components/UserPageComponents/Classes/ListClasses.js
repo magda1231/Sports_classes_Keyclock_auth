@@ -1,8 +1,11 @@
 import Class from "./Class";
 import { useEffect, useState, useMemo, useRef } from "react";
+import { useSelector } from "react-redux";
 
 const ListProducts = ({ lista }) => {
   const inputRef = useRef(null);
+
+  const role = useSelector((state) => state.auth.role);
 
   useEffect(() => {
     sortedList.length != 0 && inputRef.current.focus();
@@ -71,21 +74,19 @@ const ListProducts = ({ lista }) => {
 
   return (
     <>
-      {sortedList.length != 0 && (
-        <input
-          id="search"
-          type="text"
-          ref={inputRef}
-          onChange={(e) => {
-            e.preventDefault();
-            setSearchQuery(e.target.value);
-          }}
-          placeholder="Search by name, place, city, category or date"
-        />
-      )}
+      <input
+        id="search"
+        type="text"
+        ref={inputRef}
+        onChange={(e) => {
+          e.preventDefault();
+          setSearchQuery(e.target.value);
+        }}
+        placeholder="Search by name, place, city, category or date"
+      />
       <div className="sort">{sortedList.length != 0 && buttons}</div>
       {sortedList.map((x, el) => (
-        <Class obj={x} key={el} />
+        <Class obj={x} key={el} role={role} />
       ))}
     </>
   );

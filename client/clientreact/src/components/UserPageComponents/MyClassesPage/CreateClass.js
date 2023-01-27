@@ -5,13 +5,13 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
-  description: Yup.string().required("Description is required"),
-  date: Yup.string().required("Date is required"),
-  price: Yup.string().required("Price is required"),
-  duration: Yup.string().required("Duration is required"),
-  category: Yup.string().required("Category is required"),
-  maxPeople: Yup.string().required("Max people is required"),
+  name: Yup.string(), //.required("Name is required"),
+  description: Yup.string(), //.required("Description is required"),
+  date: Yup.string(), //.required("Date is required"),
+  price: Yup.string(), //.required("Price is required"),
+  duration: Yup.string(), //.required("Duration is required"),
+  category: Yup.string(), //.required("Category is required"),
+  maxPeople: Yup.string(), //.required("Max people is required"),
 });
 
 export default function CreateClass() {

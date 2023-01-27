@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+import jwtDecode from "jwt-decode";
 
 export const schema = yup.object().shape({
   username: yup
@@ -61,7 +62,8 @@ export default function Register() {
         }
       })
       .then((data) => {
-        console.log(data);
+        console.log("data", data);
+
         data && cookies.set("token", data);
       })
       .catch((error) => {

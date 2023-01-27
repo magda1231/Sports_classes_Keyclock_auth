@@ -1,19 +1,21 @@
 import Navbar from "../Navbar";
 import Cookies from "universal-cookie";
 import CreateClass from "./CreateClass";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import ListClasses from "../Classes/ListClasses";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchMyClasses } from "../../ActionsReducers/API_Actions";
-import Delete from "../Classes/Delete";
-// import { useTheme } from "../ThemeContext/ThemeContext";
+import { fetchMyClasses } from "../../../ActionsReducers/API_Actions";
+import authSlice from "../../../Auth/authSlice";
 
 export default function MyClasses({ obj }) {
+  const { myClasses, error, loading } = useSelector((state) => state.get);
+
+  const user = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
-  const { myClasses, error, loading } = useSelector((state) => state);
+
   useEffect(() => {
     dispatch(fetchMyClasses());
-  }, [dispatch, Delete]);
+  }, [dispatch]);
 
   return (
     <>
@@ -26,7 +28,7 @@ export default function MyClasses({ obj }) {
           {myClasses && <ListClasses lista={myClasses} />}
         </div>
 
-        <CreateClass />
+        {user == "trainer" && <CreateClass />}
       </div>
     </>
   );

@@ -5,15 +5,22 @@ import { useNavigate } from "react-router";
 import Aside from "./Aside";
 import { useEffect, useState } from "react";
 import { useTheme } from "../../ThemeContext/ThemeContext";
-import ContextThemeButton from "../../ThemeContext/ContextThemeButton";
-// import useAuth from "../../Hooks/useAuth";
+import { useSelector, useDispatch } from "react-redux";
+//import { isAdmin } from "../Auth/authSlice";
 
 export default function UserPage() {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const token = cookies.get("token");
 
-  // const { username, isUser, isAdmin } = useAuth();
+  const dispatch = useDispatch();
+
+  const admin = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    // dispatch(isAdmin());
+    console.log("sel", admin);
+  }, [dispatch]);
 
   const { theme, setTheme } = useTheme();
   useEffect(() => {

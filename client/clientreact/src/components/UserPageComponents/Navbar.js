@@ -3,11 +3,17 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import ContextThemeButton from "../../ThemeContext/ContextThemeButton";
 import { useTheme } from "../../ThemeContext/ThemeContext";
+import { clearToken } from "../../Auth/authSlice";
+import { useDispatch } from "react-redux";
+
 export default function Navbar() {
   const cookies = new Cookies();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleLogout = () => {
     cookies.remove("token");
+    dispatch(clearToken());
     navigate("/");
   };
   const { theme, setTheme } = useTheme();
@@ -43,16 +49,12 @@ export default function Navbar() {
         color: ${theme === "light" ? "black" : "white"};
         border:none;
       }
-      
-
-       
-
             `}
       </style>
 
       <nav>
         <ul>
-          <li>
+          <li className="">
             <Link to="/userpage">Strona główna</Link>
           </li>
           <li>
