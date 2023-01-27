@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Cookies from "universal-cookie";
@@ -54,9 +53,9 @@ export default function EditClass() {
     })
       .then((res) => {
         console.log(res);
-        if (res.status != 201) {
+        if (res.status !== 201) {
           alert("Zajęcia nie zostały stworzone zmień nazwę!");
-        } else if (res.status == 413) {
+        } else if (res.status === 413) {
           console.log(res.status);
           alert("Zbyt duza ilosc znakow w opisie ");
         } else {
@@ -68,8 +67,6 @@ export default function EditClass() {
       });
     reset();
   };
-
-  const today = new Date();
 
   return (
     <>
@@ -132,8 +129,12 @@ export default function EditClass() {
             {...register("category")}
           />
           {errors.category && <p>{errors.category.message}</p>}
-          <button type="submit" id="button">
-            Dodaj zajęcia
+          <button
+            type="submit"
+            id="button"
+            className="text-xs bg-blue-900 bg-opacity-70 px-4"
+          >
+            Edytuj zajęcia
           </button>
         </form>
       </div>

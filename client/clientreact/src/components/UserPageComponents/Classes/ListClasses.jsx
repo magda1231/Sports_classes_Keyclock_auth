@@ -7,10 +7,6 @@ const ListProducts = ({ lista }) => {
 
   const role = useSelector((state) => state.auth.role);
 
-  useEffect(() => {
-    sortedList.length != 0 && inputRef.current.focus();
-  }, []);
-
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,14 +45,12 @@ const ListProducts = ({ lista }) => {
       } else {
         return filteredList.sort((a, b) => b.name.localeCompare(a.name));
       }
-      // } else if (sortBy === "city") {
-      //   if (sortOrder === "asc") {
-      //     return filteredList.sort((a, b) => a.city.localeCompare(b.city));
-      //   } else {
-      //     return filteredList.sort((a, b) => b.city.localeCompare(a.city));
-      //   }
     }
   }, [sortBy, sortOrder, lista, searchQuery]);
+
+  useEffect(() => {
+    sortedList.length !== 0 && inputRef.current.focus();
+  }, []);
 
   const buttons = (
     <>
@@ -84,7 +78,7 @@ const ListProducts = ({ lista }) => {
         }}
         placeholder="Search by name, place, city, category or date"
       />
-      <div className="sort">{sortedList.length != 0 && buttons}</div>
+      <div className="sort">{sortedList.length !== 0 && buttons}</div>
       {sortedList.map((x, el) => (
         <Class obj={x} key={el} role={role} />
       ))}

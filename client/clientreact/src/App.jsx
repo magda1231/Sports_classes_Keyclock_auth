@@ -1,23 +1,23 @@
 import StartPage from "./components/StartPage/StartPage";
 import { Routes, Route } from "react-router-dom";
-import UserPage from "./components/UserPageComponents/UserPage.js";
+import UserPage from "./components/UserPageComponents/UserPage";
 import { NotFound } from "./components/NotFound";
 import MyClasses from "./components/UserPageComponents/MyClassesPage/Myclasses";
 import EditClass from "./components/UserPageComponents/Classes/EditClass";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import MyPage from "./components/UserPageComponents/Profile/MyPage";
 import Cookies from "universal-cookie";
-import "./style/styles.css";
+import "./style/styles.scss";
 
 function App() {
   const navigate = useNavigate();
 
-  const cookies = new Cookies();
-  const token = cookies.get("token");
-
   useEffect(() => {
-    if (!token && window.location.pathname != "/") {
-      navigate("/whopsnoaccess", { replace: true });
+    const cookies = new Cookies();
+    const token = cookies.get("token");
+    if (!token && window.location.pathname !== "/") {
+      navigate("/whops", { replace: true });
     }
   }, [navigate]);
 
@@ -27,9 +27,9 @@ function App() {
       <Route path="/userpage" element={<UserPage />} />
       <Route path="/myclasses" element={<MyClasses />} />
       <Route path="/myclasses/:id" element={<EditClass />} />
-      {/* <Route path="/whopsnoaccess" element={<NotFound />} /> */}
+      <Route path="/mypage" element={<MyPage />} />
       <Route
-        path="/whopsnoaccess"
+        path="/whops"
         element={
           <div>
             <h1>Page not found</h1>

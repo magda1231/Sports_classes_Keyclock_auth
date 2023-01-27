@@ -16,7 +16,7 @@ export default function Navbar() {
     dispatch(clearToken());
     navigate("/");
   };
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   return (
     <div className="Navbar">
       <style>
@@ -30,14 +30,20 @@ export default function Navbar() {
         nav{
             background-color: ${theme === "light" ? "#7eb77f;" : "#286c298a"};
             color: ${theme === "light" ? "black" : "white"};
+            background: ${
+              theme === "dark" &&
+              "linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);"
+            };
+            
           
             }
-        nav ul li a{
+        }
+        ul li{
             background-color: ${theme === "light" ? "#7eb77f;" : "#286c298a"};
             color: ${theme === "light" ? "black" : "white"};
         }
         nav ul li button{
-          background-color: ${theme === "light" ? "#7eb77f;" : "#286c298a"};
+          background-color: ${theme === "light" ? "#7eb77f;" : ""};
           color: ${theme === "light" ? "black" : "white"};
       }
       input{
@@ -47,14 +53,17 @@ export default function Navbar() {
       textarea{
         background-color: ${theme === "light" ? "white" : "gray"};
         color: ${theme === "light" ? "black" : "white"};
-        border:none;
+        border:none;}
+      h1{
+        color: ${theme === "light" ? "black" : "rgb(163, 60, 115)"};
       }
+      
             `}
       </style>
 
       <nav>
         <ul>
-          <li className="">
+          <li>
             <Link to="/userpage">Strona główna</Link>
           </li>
           <li>
@@ -70,7 +79,11 @@ export default function Navbar() {
               Wyloguj się
             </button>
           </li>
-          <div className="logo"></div>
+          <div className="logo">
+            <button className="logo">
+              <Link to="/mypage"></Link>
+            </button>
+          </div>
         </ul>
       </nav>
     </div>
