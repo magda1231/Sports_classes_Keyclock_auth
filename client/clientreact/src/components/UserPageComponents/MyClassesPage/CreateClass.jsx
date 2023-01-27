@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
@@ -29,7 +28,7 @@ export default function CreateClass() {
   //   console.log(get());
   // }, [handleSubmit]);
 
-  const onSubmit = (data) => {
+  const onSubmit = (data, newclass) => {
     const cookies = new Cookies();
     const token = cookies.get("token");
     console.log();
@@ -42,22 +41,24 @@ export default function CreateClass() {
       body: JSON.stringify(data),
     })
       .then((res) => {
-        if (res.status != 201) {
+        if (res.status !== 201) {
           alert("Zajęcia nie zostały stworzone zmień nazwę!");
-        } else if (res.status == 413) {
+        } else if (res.status === 413) {
           console.log(res.status);
           alert("Zdjęcie ma zbyt duza wielkość, zmień je na mniejsze!");
         } else {
           alert("Zajęcia zostały stworzone odswież stronę!");
+          newclass(true);
         }
       })
       .catch((err) => {
         console.log(err);
       });
+
     reset();
   };
 
-  const today = new Date();
+  // const today = new Date();
 
   return (
     <div className="CreateClass">
@@ -118,7 +119,7 @@ export default function CreateClass() {
           {...register("category")}
         />
         {errors.category && <p>{errors.category.message}</p>}
-        <button type="submit" id="button">
+        <button className="  bg-slate-500" type="submit" id="button">
           Dodaj zajęcia
         </button>
       </form>

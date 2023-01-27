@@ -1,17 +1,20 @@
 import Navbar from "../Navbar";
-import Cookies from "universal-cookie";
+
 import CreateClass from "./CreateClass";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import ListClasses from "../Classes/ListClasses";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMyClasses } from "../../../ActionsReducers/API_Actions";
-import authSlice from "../../../Auth/authSlice";
 
 export default function MyClasses({ obj }) {
   const { myClasses, error, loading } = useSelector((state) => state.get);
 
   const user = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
+  const [newclass, setnewclass] = useState(false);
+  const refresh = (newclass) => {
+    setnewclass(newclass);
+  };
 
   useEffect(() => {
     dispatch(fetchMyClasses());
@@ -25,10 +28,14 @@ export default function MyClasses({ obj }) {
         <div className="classes">
           {loading && <h1>Loading...</h1>}
           {error && <h1>Error: {error}</h1>}
-          {myClasses && <ListClasses lista={myClasses} />}
+          {myClasses && (
+            <ListClasses
+              lista={myClasses} //newclass={refresh(created)}
+            />
+          )}
         </div>
 
-        {user == "trainer" && <CreateClass />}
+        {user === "trainer" && <CreateClass />}
       </div>
     </>
   );

@@ -5,8 +5,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchMain } from "../../ActionsReducers/API_Actions";
 
 export default function Main() {
-  const state = useSelector((state) => state);
-
   const { mainPageClasses, error, loading } = useSelector((state) => state.get);
 
   const dispatch = useDispatch();
@@ -16,9 +14,11 @@ export default function Main() {
   }, [dispatch]);
   return (
     <>
+      {/* <div className=""> */}
       {loading && <h1>Loading...</h1>}
       {error ? <h1>Error: {error}</h1> : null}
       {mainPageClasses && <ListClasses lista={mainPageClasses} />}
+      {/* </div> */}
     </>
   );
   // return <ListClasses lista={res} />;

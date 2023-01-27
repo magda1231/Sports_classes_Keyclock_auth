@@ -3,11 +3,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-//import authSlice from "../Auth/authSlice";
+
 import { setToken } from "../../Auth/authSlice";
 import jwtDecode from "jwt-decode";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export const schema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -18,23 +18,15 @@ export default function Login() {
   const cookies = new Cookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  //const user = useSelector((state) => state.auth);
-  // dispatch(setToken(user));
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
-
-  //get values
-  // const { username, password } = getValues();
-
-  // console.log("aaa");
 
   const fetchfunction = (endpoint, data) => {
     fetch(`http://localhost:3003/${endpoint}`, {
@@ -48,7 +40,7 @@ export default function Login() {
           navigate("/userpage");
           // dispatch(setToken(data));
           return response.json();
-        } else if (response.status == 403) {
+        } else if (response.status === 403) {
           return;
         } else {
           throw new Error("Something went wrong");

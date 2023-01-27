@@ -1,17 +1,22 @@
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+
 import Delete from "./Delete";
-import EditClass from "./EditClass";
 import SignToClass from "./UserFunctions/SignToClass";
-import { useSelector } from "react-redux";
 
 export default function Class({ obj, role }) {
   //console.log(window.location.pathname);
   const trainer_edit_buttons = (
     <>
-      {window.location.pathname == "/myclasses" && (
-        <div className="class">
-          {obj.id && <Link to={`/myclasses/${obj.id}`}>Zaktualizuj dane</Link>}
+      {window.location.pathname === "/myclasses" && (
+        <div className="   space-x-3">
+          {obj.id && (
+            <Link
+              className=" bg-slate-400 p-2   rounded-3xl  text-xs text-white"
+              to={`/myclasses/${obj.id}`}
+            >
+              Zaktualizuj dane
+            </Link>
+          )}
           <Delete id={obj.id} />
         </div>
       )}
@@ -19,7 +24,7 @@ export default function Class({ obj, role }) {
   );
   const participant_edit_buttons = (
     <>
-      {window.location.pathname == "/userpage" && (
+      {window.location.pathname === "/userpage" && (
         <div className="class">
           <SignToClass id={obj.id} />
         </div>

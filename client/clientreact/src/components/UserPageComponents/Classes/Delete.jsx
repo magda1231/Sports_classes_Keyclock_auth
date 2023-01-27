@@ -14,7 +14,7 @@ export default function Delete(props) {
       body: JSON.stringify({ id: props.id }),
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           alert(
             "Zajęcia zostały usunięte, odświez stronę aby wyswietlic aktualne swoje zajecia"
           );
@@ -24,13 +24,16 @@ export default function Delete(props) {
         // props.setClasses(data);
       })
       .catch((err) => {
-        console.log(err);
+        alert("Nie udało się usunąć zajęć");
       });
   };
 
   return (
-    <button className="delete" onClick={handleDelete}>
-      Usuń
+    <button
+      className="  bg-slate-400 text-white text-xs p-2   rounded-3xl   w-24"
+      onClick={handleDelete}
+    >
+      Usuń zajęcia
     </button>
   );
 }

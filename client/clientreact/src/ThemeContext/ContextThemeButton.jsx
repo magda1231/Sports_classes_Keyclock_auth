@@ -1,5 +1,4 @@
 import { useTheme } from "./ThemeContext";
-import { useContext } from "react";
 
 const ContextThemeButton = (props) => {
   const { theme, setTheme } = useTheme();
