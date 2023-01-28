@@ -30,7 +30,7 @@ export default function Delete(props) {
 
   return (
     <button
-      className="  bg-slate-400 text-white text-xs p-2   rounded-3xl   w-24"
+      className=" bg-[#7eb77f] text-white text-xs p-2   rounded-3xl   w-24"
       onClick={handleDelete}
     >
       Usuń zajęcia

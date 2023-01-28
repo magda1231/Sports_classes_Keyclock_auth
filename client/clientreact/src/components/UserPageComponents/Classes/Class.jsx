@@ -2,16 +2,18 @@ import { Link } from "react-router-dom";
 
 import Delete from "./Delete";
 import SignToClass from "./UserFunctions/SignToClass";
+import UnSignFromClass from "./UserFunctions/UnSign";
 
 export default function Class({ obj, role }) {
-  //console.log(window.location.pathname);
+  console.log(role);
+
   const trainer_edit_buttons = (
     <>
       {window.location.pathname === "/myclasses" && (
         <div className="   space-x-3">
           {obj.id && (
             <Link
-              className=" bg-slate-400 p-2   rounded-3xl  text-xs text-white"
+              className=" bg-[#7eb77f] p-2   rounded-3xl  text-xs text-white"
               to={`/myclasses/${obj.id}`}
             >
               Zaktualizuj dane
@@ -29,29 +31,55 @@ export default function Class({ obj, role }) {
           <SignToClass id={obj.id} />
         </div>
       )}
+      {window.location.pathname === "/myclasses" && (
+        <div className="class">
+          <UnSignFromClass id={obj.id} />
+        </div>
+      )}
     </>
   );
 
   return (
-    <div className="Class">
-      {obj.image !== "undefined" ? (
-        <img width="400px" src={obj.image} alt="img" />
-      ) : null}
-      <h1>{obj.name}</h1>
-      <h2>{obj.type}</h2>
-      <div className="important_info">
-        <h3>Miasto: {obj.city}</h3>
-        <br />
-        <h3>Miejsce: {obj.place}</h3>
-        <h3>Godzina: {obj.time}</h3>
-        <h4>Cena: {obj.price}</h4>
-        <h4>Data: {obj.date}</h4>
+    <div className="p-6   rounded-3xl shadow-md bg-slate-200 bg-opacity-30 m-4">
+      <h2 className="text-2xlg font-medium text-center text-pink-600">
+        {obj.name}
+      </h2>
+      <div className="flex">
+        <p className="mr-2 font-medium">
+          City: <b>{obj.city}</b>
+        </p>
+        <p className="">
+          Place: <b>{obj.place}</b>
+        </p>
       </div>
-      <p>{obj.description}</p>
+      <div className=" flex">
+        <p className="mr-2 font-medium">
+          Date: <b>{obj.date}</b>
+        </p>
+        <p className="font-medium">
+          Hour: <b>{obj.hour}</b>
+        </p>
+      </div>
+      <div className="">
+        <p className="font-medium">
+          Category: <b>{obj.category}</b>
+        </p>
+      </div>
+      <div className="">
+        <p className="font-medium">
+          Price: <b>{obj.price}</b>
+        </p>
+      </div>
       <div>
-        {role === "trainer" && trainer_edit_buttons},
-        {role === "user" && participant_edit_buttons}
+        <p className=" mt-4">{obj.description}</p>
       </div>
+      <div className="flex justify-between">
+        {role === "trainer" && trainer_edit_buttons}
+        {role === "participant" && participant_edit_buttons}
+      </div>
+      <div className="flex justify-between"></div>
+
+      {role === "user" && participant_edit_buttons}
     </div>
   );
 }
