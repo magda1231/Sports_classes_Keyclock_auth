@@ -3,15 +3,18 @@ import ListClasses from "./Classes/ListClasses";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMain } from "../../ActionsReducers/API_Actions";
+import { Refresh } from "../../ThemeContext/RefreshContext";
 
 export default function Main() {
   const { mainPageClasses, error, loading } = useSelector((state) => state.get);
+
+  const { refresh } = Refresh();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchMain());
-  }, [dispatch]);
+  }, [dispatch, refresh]);
   return (
     <>
       {/* <div className=""> */}

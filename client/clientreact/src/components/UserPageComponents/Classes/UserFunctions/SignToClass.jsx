@@ -1,9 +1,15 @@
 import React from "react";
 import Cookies from "universal-cookie";
+import { useState } from "react";
+import { Refresh } from "../../../../ThemeContext/RefreshContext";
 
 export default function SignToClass({ id }) {
   const cookies = new Cookies();
   const token = cookies.get("token");
+
+  const [active, setActive] = useState(true);
+
+  const { refresh, setRefresh } = Refresh();
 
   const handleSigning = () => {
     fetch(`http://localhost:3003/myclasses/register/${id}`, {
@@ -16,9 +22,19 @@ export default function SignToClass({ id }) {
     })
       .then((res) => {
         if (res.ok) {
-          if (res.status === 200) alert("Zapisano na zajęcia");
-          return res.json();
+          if (res.status === 200) {
+            setRefresh(!refresh);
+            alert("Zapisano na zajęcia");
+            setActive(false);
+            return res.json();
+          }
+          if (res.status === 409) alert("Już jesteś zapisany na to zajęcie");
+
+          if (res.status === 404) alert("Nie udało się zapisać na zajęcia");
+          if (res.status === 503)
+            alert("Nie udało się zapisać na zajęcia limit osiagnieto");
         }
+
         throw res;
       })
       .then((data) => {
@@ -31,5 +47,9 @@ export default function SignToClass({ id }) {
       });
   };
 
-  return <button onClick={handleSigning}>Zapisz się na zajęcia</button>;
+  return (
+    <>
+      <button onClick={handleSigning}>Zapisz się na zajęcia</button>
+    </>
+  );
 }

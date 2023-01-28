@@ -1,13 +1,12 @@
 import Class from "./Class";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, useLayoutEffect } from "react";
 import { useSelector } from "react-redux";
+import { Refresh } from "../../../ThemeContext/RefreshContext";
 
 const ListProducts = ({ lista }) => {
   const inputRef = useRef(null);
 
   const role = useSelector((state) => state.auth.role);
-
-  const { loading } = useSelector((state) => state.get);
 
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -50,9 +49,9 @@ const ListProducts = ({ lista }) => {
     }
   }, [sortBy, sortOrder, lista, searchQuery]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     sortedList.length !== 0 && inputRef.current.focus();
-  }, []);
+  }, [sortedList]);
 
   const buttons = (
     <>
@@ -70,8 +69,9 @@ const ListProducts = ({ lista }) => {
 
   return (
     <>
-      {!loading && (
+      {sortedList.length !== 0 && (
         <input
+          className="  px-4"
           id="search"
           type="text"
           ref={inputRef}
@@ -82,6 +82,7 @@ const ListProducts = ({ lista }) => {
           placeholder="Search by name, place, city, category or date"
         />
       )}
+
       <div className="sort">{sortedList.length !== 0 && buttons}</div>
       <div>
         {sortedList.map((x, el) => (

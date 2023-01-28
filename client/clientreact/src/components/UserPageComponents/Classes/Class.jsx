@@ -5,8 +5,6 @@ import SignToClass from "./UserFunctions/SignToClass";
 import UnSignFromClass from "./UserFunctions/UnSign";
 
 export default function Class({ obj, role }) {
-  console.log(role);
-
   const trainer_edit_buttons = (
     <>
       {window.location.pathname === "/myclasses" && (
@@ -68,6 +66,13 @@ export default function Class({ obj, role }) {
       <div className="">
         <p className="font-medium">
           Price: <b>{obj.price}</b>
+        </p>
+      </div>
+      <div className="">
+        <p className="font-medium">
+          Max participants: <b>{obj.maxPeople}</b>
+          <br />
+          Registered: <b>{obj.registered}</b>
         </p>
       </div>
       <div>

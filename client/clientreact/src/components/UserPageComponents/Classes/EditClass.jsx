@@ -6,16 +6,16 @@ import Cookies from "universal-cookie";
 import Navbar from "../Navbar";
 
 const schema = Yup.object().shape({
-  name: Yup.string(), //.required("Name is required"),
-  description: Yup.string(), //.required("Description is required"),
-  date: Yup.string(), //.required("Date is required"),
+  name: Yup.string().required("Name is required"),
+  description: Yup.string().required("Description is required"),
+  date: Yup.string().required("Date is required"),
   // yup time validation
-  time: Yup.string(),
-  //.required("Time is required"),
-  price: Yup.string(), //.required("Price is required"),
-  duration: Yup.string(), //.required("Duration is required"),
-  category: Yup.string(), //.required("Category is required"),
-  maxPeople: Yup.string(), //.required("Max people is required"),
+  time: Yup.string().
+   required("Time is required"),
+  price: Yup.string().required("Price is required"),
+  duration: Yup.string().required("Duration is required"),
+  category: Yup.string().required("Category is required"),
+  maxPeople: Yup.string().required("Max people is required"),
 });
 
 export default function EditClass() {

@@ -23,6 +23,7 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(schema),
@@ -40,7 +41,7 @@ export default function Login() {
           navigate("/userpage");
           return response.json();
         } else if (response.status === 403) {
-          alert("Niepoprawne dane logowania!");
+          setError("submit", { message: "Złe dane" });
           return;
         } else {
           throw new Error("Something went wrong");
@@ -63,18 +64,37 @@ export default function Login() {
     fetchfunction("login", data);
   };
 
+  const style = {
+    input: {
+      border: "1px solid red",
+    },
+  };
+
   return (
     <div className="login">
       <h2>Zaloguj się</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <style>
+          {`
+         ${
+           errors.submit &&
+           "#username,#password {outline: none !important;border:1px solid red; transition: all 0.3s ease-out;}"
+         }
+
+        
+          
+        `}
+        </style>
         <input
+          id="username"
           type="text"
           name="username"
-          placeholder="USERNAME"
+          placeholder="NAZWA UŻYTKOWNIKA"
           {...register("username")}
         />
         {errors.username && <p className="error">{errors.username.message}</p>}
         <input
+          id="password"
           type="password"
           name="password"
           placeholder="PASSWORD"
@@ -82,6 +102,7 @@ export default function Login() {
         />
         {errors.password && <p className="error">{errors.password.message}</p>}
         <button>ZALOGUJ SIĘ</button>
+        {/* {errors.submit && <p className="error">{errors.submit.message}</p>} */}
       </form>
     </div>
   );

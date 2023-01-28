@@ -8,16 +8,6 @@ import { Cookie } from "universal-cookie";
 import jwtDecode from "jwt-decode";
 
 const schema = yup.object().shape({
-  name: yup
-    .string()
-    .required("Username is required")
-    .matches(/^(?!\s)(?!.*\s$)/, "Username cannot contain space or tab")
-    .max(20, "Max 7")
-    .matches(
-      /^[a-zA-Z0-9]+$/,
-      "Username must contain only letters and numbers"
-    ),
-
   email: yup.string().email("Email is not valid").required("Email is required"),
 
   password: yup
@@ -38,11 +28,12 @@ export default function EditProfile() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "onSubmit",
+    mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
   const onSubmit = (data) => {
+    console.log(data);
     fetch("http://localhost:3003/user/update", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -78,18 +69,7 @@ export default function EditProfile() {
             onSubmit={handleSubmit(onSubmit)}
             className="px-4  flex  flex-col p-4  items-center border-8    h-auto"
           >
-            <div className="flex  flex-col p-4    justify-around  justify-items-start h-48  w-8/12  ">
-              <div className="flex justify-between space-x-2">
-                <label htmlFor="name">Name</label>
-                <input
-                  className="  bg-slate-200  rounded-sm"
-                  type="text"
-                  name="name"
-                  id="name"
-                  {...register("name")}
-                />
-                {errors.name && <div>{errors.name.message}</div>}
-              </div>
+            <div className="flex  flex-col p-4    justify-around  justify-items-start h-64  w-8/12  ">
               <div className="flex justify-between space-x-2">
                 <label className="  rounded-sm" htmlFor="email">
                   Email
@@ -101,8 +81,10 @@ export default function EditProfile() {
                   id="email"
                   {...register("email")}
                 />
-                {errors.email && <div>{errors.email.message}</div>}
               </div>
+              {errors.email && (
+                <div className=" text-red-800">{errors.email.message}</div>
+              )}
               <div className="flex justify-between space-x-2">
                 <label htmlFor="password">Password</label>
                 <input
@@ -112,10 +94,12 @@ export default function EditProfile() {
                   id="password"
                   {...register("password")}
                 />
-                {errors.password && <div>{errors.password.message}</div>}
               </div>
+              {errors.password && (
+                <div className=" text-red-800">{errors.password.message}</div>
+              )}
             </div>
-            <button className="  bg-slate-400" type="submit">
+            <button className=" bg-slate-400" type="submit">
               Zapisz zmiany
             </button>
           </form>
