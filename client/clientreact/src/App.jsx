@@ -5,6 +5,7 @@ import { NotFound } from "./components/NotFound";
 import MyClasses from "./components/UserPageComponents/MyClassesPage/Myclasses";
 import EditClass from "./components/UserPageComponents/Classes/EditClass";
 import { useNavigate } from "react-router-dom";
+
 import { useEffect } from "react";
 import MyPage from "./components/UserPageComponents/Profile/MyPage";
 import Cookies from "universal-cookie";

@@ -1,7 +1,7 @@
 import Navbar from "../Navbar";
 
 import CreateClass from "./CreateClass";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import ListClasses from "../Classes/ListClasses";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMyClasses } from "../../../ActionsReducers/API_Actions";
@@ -16,9 +16,10 @@ export default function MyClasses({ obj }) {
     setnewclass(newclass);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(fetchMyClasses());
-  }, [dispatch]);
+    setnewclass(false);
+  }, [dispatch, newclass]);
 
   return (
     <>
@@ -35,7 +36,7 @@ export default function MyClasses({ obj }) {
           )}
         </div>
 
-        {user === "trainer" && <CreateClass />}
+        {user === "trainer" && <CreateClass refresh={refresh} />}
       </div>
     </>
   );

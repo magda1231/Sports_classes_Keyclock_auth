@@ -47,11 +47,12 @@ export default function Navbar() {
           color: ${theme === "light" ? "black" : "white"};
       }
       input{
-        background-color: ${theme === "light" ? "white" : "gray"};
+        background-color: ${theme === "light" ? "white" : "#D3D3D3 "};
         color: ${theme === "light" ? "black" : "white"};
       }
+
       textarea{
-        background-color: ${theme === "light" ? "white" : "gray"};
+        background-color: ${theme === "light" ? "white" : "#D3D3D3 "};
         color: ${theme === "light" ? "black" : "white"};
         border:none;}
       h1{

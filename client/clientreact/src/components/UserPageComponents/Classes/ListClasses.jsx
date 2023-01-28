@@ -7,6 +7,8 @@ const ListProducts = ({ lista }) => {
 
   const role = useSelector((state) => state.auth.role);
 
+  const { loading } = useSelector((state) => state.get);
+
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,20 +70,24 @@ const ListProducts = ({ lista }) => {
 
   return (
     <>
-      <input
-        id="search"
-        type="text"
-        ref={inputRef}
-        onChange={(e) => {
-          e.preventDefault();
-          setSearchQuery(e.target.value);
-        }}
-        placeholder="Search by name, place, city, category or date"
-      />
+      {!loading && (
+        <input
+          id="search"
+          type="text"
+          ref={inputRef}
+          onChange={(e) => {
+            e.preventDefault();
+            setSearchQuery(e.target.value);
+          }}
+          placeholder="Search by name, place, city, category or date"
+        />
+      )}
       <div className="sort">{sortedList.length !== 0 && buttons}</div>
-      {sortedList.map((x, el) => (
-        <Class obj={x} key={el} role={role} />
-      ))}
+      <div>
+        {sortedList.map((x, el) => (
+          <Class obj={x} key={el} role={role} />
+        ))}
+      </div>
     </>
   );
 };

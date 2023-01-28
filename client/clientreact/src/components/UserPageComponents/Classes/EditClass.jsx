@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Cookies from "universal-cookie";
@@ -20,6 +20,7 @@ const schema = Yup.object().shape({
 
 export default function EditClass() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -51,19 +52,17 @@ export default function EditClass() {
       },
       body: JSON.stringify(data),
     })
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
-        if (res.status !== 201) {
-          alert("Zajęcia nie zostały stworzone zmień nazwę!");
-        } else if (res.status === 413) {
-          console.log(res.status);
+        if (res.status === 413) {
           alert("Zbyt duza ilosc znakow w opisie ");
-        } else {
-          alert("Zajęcia zostały stworzone odswież stronę!");
+        } else if (res.status === 200) {
+          alert("Zajęcia zostały zedytowane");
+          navigate("/myclasses");
         }
       })
       .catch((err) => {
-        console.log(err);
+        alert("Zajęcia nie zostały zedytowane");
       });
     reset();
   };

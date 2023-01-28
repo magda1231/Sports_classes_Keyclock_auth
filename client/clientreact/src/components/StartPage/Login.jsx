@@ -38,9 +38,9 @@ export default function Login() {
         console.log("response", response.status);
         if (response.ok) {
           navigate("/userpage");
-          // dispatch(setToken(data));
           return response.json();
         } else if (response.status === 403) {
+          alert("Niepoprawne dane logowania!");
           return;
         } else {
           throw new Error("Something went wrong");
@@ -50,7 +50,8 @@ export default function Login() {
         await data;
         cookies.set("token", data, { path: "/" });
         const token = jwtDecode(data.accessToken);
-        dispatch(setToken(token.role));
+        dispatch(setToken(token));
+
         // console.log("us", us);
       })
       .catch((error) => {

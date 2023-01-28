@@ -177,10 +177,8 @@ nav {
 }
 h1 {
   text-align: center;
-  // margin-top: 0;
   font-size: 1.8rem;
   font-weight: bold;
-  // margin-bottom: 29.92px;
   color: #f92a82;
   margin: 2rem;
 }
@@ -188,7 +186,6 @@ h1 {
   display: grid;
   width: 80%;
   margin: auto;
-  // grid-template-columns: 3fr 1fr;
 }
 
 .Class {
@@ -222,6 +219,7 @@ h1 {
     padding: 2rem;
   }
 }
+
 h2 {
   font-weight: bold;
   font-size: 1.5rem;
@@ -240,9 +238,9 @@ input {
       // font-weight: bold;
     }
     width: 35rem;
-    background-color: rgba(128, 128, 128, 0.178);
+    background-color: rgb(203 213 225 / 0.3);
     box-shadow: rgba(10, 37, 64, 0.35) 0px 0px 10px 0px;
-    border-radius: 40px;
+    border-radius: 25px;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
@@ -255,7 +253,7 @@ input {
       width: 12rem;
       border-radius: 10px;
       border: none;
-      color: rgba(71, 70, 70, 0.742);
+
       border: 1px rgba(0, 0, 0, 0.199) solid;
       margin-bottom: 1rem;
     }
@@ -333,7 +331,9 @@ img {
 
 #search {
   width: 100%;
+  margin: auto;
   height: 3rem;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: center;
   border-radius: 20px;

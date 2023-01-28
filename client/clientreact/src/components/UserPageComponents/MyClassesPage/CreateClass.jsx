@@ -13,7 +13,7 @@ const schema = Yup.object().shape({
   maxPeople: Yup.string(), //.required("Max people is required"),
 });
 
-export default function CreateClass() {
+export default function CreateClass({ refresh }) {
   const {
     register,
     handleSubmit,
@@ -28,7 +28,7 @@ export default function CreateClass() {
   //   console.log(get());
   // }, [handleSubmit]);
 
-  const onSubmit = (data, newclass) => {
+  const onSubmit = (data) => {
     const cookies = new Cookies();
     const token = cookies.get("token");
     console.log();
@@ -48,7 +48,7 @@ export default function CreateClass() {
           alert("Zdjęcie ma zbyt duza wielkość, zmień je na mniejsze!");
         } else {
           alert("Zajęcia zostały stworzone odswież stronę!");
-          newclass(true);
+          refresh(true);
         }
       })
       .catch((err) => {
