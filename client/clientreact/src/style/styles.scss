@@ -1,10 +1,6 @@
-// //@import "../../tailwind.config.js";
 @import "tailwindcss/base";
-
-// // Import any additional Tailwind CSS styles you want to use
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-
 * {
   margin: 0;
   padding: 0;
@@ -93,7 +89,6 @@ nav {
   width: 1000px;
   min-width: min-content;
   margin: auto;
-  // max-width: 1500px;
   display: grid;
   justify-content: center;
 
@@ -112,11 +107,10 @@ nav {
         padding: 0;
         font-size: 1.5rem;
         color: #f92a82;
-        // color: #345995;
       }
       background-color: whitesmoke;
       height: 20rem;
-      border-radius: 50px;
+      border-radius: 20px;
       padding: 2rem;
       p {
         padding: 2rem 0;
@@ -129,7 +123,7 @@ nav {
 
 .register,
 .login {
-  border-radius: 40px;
+  border-radius: 20px;
   padding: 2rem;
   background-color: rgba(245, 245, 245, 0.813);
 
@@ -220,6 +214,12 @@ h1 {
   }
 }
 
+.CreateClass {
+  p {
+    color: red;
+  }
+}
+
 h2 {
   font-weight: bold;
   font-size: 1.5rem;
@@ -231,11 +231,9 @@ input {
 .CreateClass {
   form {
     margin-top: 0;
-
     h1 {
       margin: 1rem;
       color: #f8378a;
-      // font-weight: bold;
     }
     width: 35rem;
     background-color: rgb(203 213 225 / 0.3);
@@ -248,7 +246,6 @@ input {
     gap: 0.5rem;
     align-items: center;
     input {
-      // margin: 10px;
       padding: 0.2rem;
       width: 12rem;
       border-radius: 10px;
@@ -259,7 +256,6 @@ input {
     }
     textarea {
       border-radius: 20px;
-
       width: 12rem;
       padding: 5px;
     }
@@ -320,9 +316,9 @@ img {
   button {
     background-color: #34599570;
     margin: 0.5rem 1rem;
-    width: 5rem;
-    font-size: 0.6rem;
-    padding: 0 1rem;
+    width: 6rem;
+    font-size: 0.75rem;
+    padding: 0 1.5rem;
     &:active {
       background-color: #345c9c83;
     }
@@ -348,4 +344,9 @@ img {
   font-size: 1rem;
   display: flex;
   justify-content: center;
+}
+
+.error {
+  color: #6d1b2f;
+  font-size: 0.8rem;
 }

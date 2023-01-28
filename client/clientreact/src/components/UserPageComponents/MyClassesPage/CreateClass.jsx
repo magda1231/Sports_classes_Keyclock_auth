@@ -2,31 +2,34 @@ import Cookies from "universal-cookie";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Refresh } from "../../../ThemeContext/RefreshContext";
+
+const today = new Date();
 
 const schema = Yup.object().shape({
-  name: Yup.string(), //.required("Name is required"),
-  description: Yup.string(), //.required("Description is required"),
-  date: Yup.string(), //.required("Date is required"),
-  price: Yup.string(), //.required("Price is required"),
-  duration: Yup.string(), //.required("Duration is required"),
-  category: Yup.string(), //.required("Category is required"),
-  maxPeople: Yup.string(), //.required("Max people is required"),
+  name: Yup.string().required("Name is required"),
+  description: Yup.string().required("Description is required"),
+  // date: Yup.string().required("Date is required"),
+
+  // hour: Yup.string().required("Hour is required"),
+  price: Yup.number("Must be a number").required("Price is required"),
+  // duration: Yup.string().required("Duration is required"),
+  // category: Yup.string().required("Category is required"),
+  // maxPeople: Yup.string().required("Max people is required"),
 });
 
-export default function CreateClass({ refresh }) {
+export default function CreateClass() {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({
-    mode: "onBlur",
+    mode: "onSubmit",
     resolver: yupResolver(schema),
   });
 
-  // useEffect(() => {
-  //   console.log(get());
-  // }, [handleSubmit]);
+  const { refresh, setRefresh } = Refresh();
 
   const onSubmit = (data) => {
     const cookies = new Cookies();
@@ -41,24 +44,23 @@ export default function CreateClass({ refresh }) {
       body: JSON.stringify(data),
     })
       .then((res) => {
+        console.log(res.status);
         if (res.status !== 201) {
           alert("Zajęcia nie zostały stworzone zmień nazwę!");
         } else if (res.status === 413) {
-          console.log(res.status);
           alert("Zdjęcie ma zbyt duza wielkość, zmień je na mniejsze!");
-        } else {
+        } else if (res.status == 400) {
+          alert("Zmień nazwę zajęć! Musi być unikalna");
+        } else if (res.status === 201) {
           alert("Zajęcia zostały stworzone odswież stronę!");
-          refresh(true);
+          setRefresh(!refresh);
+          reset();
         }
       })
       .catch((err) => {
-        console.log(err);
+        alert("Zajęcia nie zostały stworzone!");
       });
-
-    reset();
   };
-
-  // const today = new Date();
 
   return (
     <div className="CreateClass">
@@ -78,7 +80,7 @@ export default function CreateClass({ refresh }) {
         <input type="text" name="price" id="price" {...register("price")} />
         {errors.price && <p>{errors.price.message}</p>}
 
-        <label>Miasto</label>
+        {/* <label>Miasto</label>
         <input type="text" name="city" id="city" {...register("city")} />
         {errors.city && <p>{errors.city.message}</p>}
         <label>Miejsce</label>
@@ -117,7 +119,7 @@ export default function CreateClass({ refresh }) {
           name="category"
           id="category"
           {...register("category")}
-        />
+        /> */}
         {errors.category && <p>{errors.category.message}</p>}
         <button className="  bg-slate-500" type="submit" id="button">
           Dodaj zajęcia

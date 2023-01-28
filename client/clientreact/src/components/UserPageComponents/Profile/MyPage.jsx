@@ -7,7 +7,7 @@ export default function MyPage() {
   return (
     <div>
       <Navbar />
-      <div className="  flex justify-center  text-lg   bg-slate-200 w-8/12 m-auto p-4 rounded-lg">
+      <div className="  flex justify-center  text-lg   bg-slate-200 opacity-60 w-8/12 m-auto p-4 rounded-lg">
         <button className=" h-10  w-48 " onClick={() => setDisplay(!display)}>
           Edytuj profil
         </button>

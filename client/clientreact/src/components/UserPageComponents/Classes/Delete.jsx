@@ -1,8 +1,13 @@
 import Cookies from "universal-cookie";
+import { Refresh } from "../../../ThemeContext/RefreshContext";
 
 export default function Delete(props) {
   const cookies = new Cookies();
   const token = cookies.get("token");
+  //console.log("aa");
+
+  const { refresh, setRefresh } = Refresh();
+  // console.log(refresh, "refresh");
 
   const handleDelete = () => {
     fetch(`http://localhost:3003/myclasses`, {
@@ -15,13 +20,15 @@ export default function Delete(props) {
     })
       .then((res) => {
         if (res.status === 200) {
-          alert(
-            "Zajęcia zostały usunięte, odświez stronę aby wyswietlic aktualne swoje zajecia"
-          );
+          console.log(refresh, "refreshb");
+          setRefresh(!refresh);
+
+          //console.log(refresh, "after refresh");
+
+          // alert(
+          //   "Zajęcia zostały usunięte, odświez stronę aby wyswietlic aktualne swoje zajecia"
+          // );
         }
-      })
-      .then((data) => {
-        // props.setClasses(data);
       })
       .catch((err) => {
         alert("Nie udało się usunąć zajęć");
