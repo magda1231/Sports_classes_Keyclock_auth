@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Delete from "./Delete";
 import SignToClass from "./UserFunctions/SignToClass";
 import UnSignFromClass from "./UserFunctions/UnSign";
+import Chat from "../Chat/Chat";
 
 export default function Class({ obj, role }) {
   const trainer_edit_buttons = (
@@ -85,6 +86,7 @@ export default function Class({ obj, role }) {
       <div className="flex justify-between"></div>
 
       {role === "user" && participant_edit_buttons}
+      <Chat />
     </div>
   );
 }
