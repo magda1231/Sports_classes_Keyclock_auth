@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import MyPage from "./components/UserPageComponents/Profile/MyPage";
 import Cookies from "universal-cookie";
 import "./style/styles.scss";
+import Chat from "./components/UserPageComponents/Chat/Chat";
 
 function App() {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ function App() {
       <Route path="/myclasses" element={<MyClasses />} />
       <Route path="/myclasses/:id" element={<EditClass />} />
       <Route path="/mypage" element={<MyPage />} />
+      <Route path="/chat" element={<Chat />} />
       <Route
         path="/whops"
         element={

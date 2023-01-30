@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
+//mqtt
+import mqtt from "mqtt/dist/mqt";
 
-const App = ({ id }) => {
+const Chat = ({ id }) => {
   const [response, setResponse] = useState("");
 
   useEffect(() => {
@@ -33,16 +35,18 @@ const App = ({ id }) => {
 
   return (
     <div>
-      <button onClick={handleClick}>Send new comment</button>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="comment" onChange={handleInput} />
-        <button>
-          <i className="fas fa-paper-plane"></i>
-        </button>
-      </form>
-      <p>{response}</p>
+      <div className=" bg-slate-300   h-72 mx-10">
+        <button onClick={handleClick}>Send new comment</button>
+        <form onSubmit={handleSubmit}>
+          <input type="text" name="comment" onChange={handleInput} />
+          <button>
+            <i className="fas fa-paper-plane"></i>
+          </button>
+        </form>
+        <p>{response}</p>
+      </div>
     </div>
   );
 };
 
-export default App;
+export default Chat;
