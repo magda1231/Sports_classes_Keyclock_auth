@@ -15,8 +15,6 @@ export default function Timer() {
         setTime([a, b]);
       }
     });
-
-    return () => {};
   }, []);
 
   return (
@@ -24,7 +22,7 @@ export default function Timer() {
       className="  h-min w-90 mx-auto flex flex-col  w-max  text-pink-600 my-10"
       id="timer"
     >
-      {/* <img /> */}
+      <img />
       <div className="text">
         <h2>Nie czekaj zapisz sie juz dziś</h2>
         <h2>Cenny czas mija</h2>
