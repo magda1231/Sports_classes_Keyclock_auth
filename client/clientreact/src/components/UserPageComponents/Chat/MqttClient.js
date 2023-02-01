@@ -19,4 +19,4 @@ const options = {
     retain: false,
   },
 };
-export const client = mqtt.connect(host, options);
+export const client = mqtt.connect(host);
