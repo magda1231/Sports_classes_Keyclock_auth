@@ -251,12 +251,44 @@ async function UnSignFromClass(user, id, res) {
     await session.close();
   }
 }
-// const AddMessage = async (message, res) => {
-//   let session = driver.session();
-//   try {
-//    //chat id
-//     const chatId = message.chatId;
-//     //user id
+// Add Message to chat history
+async function addMessage(message, res) {
+  let session = driver.session();
+  try {
+    const readQuery = `MATCH (u:User {username: "${message.username}"})
+    MATCH (c:Class {id: "${message.classId}"})
+    CREATE (u)-[:MESSAGE {message: "${message.message}"}]->(c) RETURN c`;
+    const readResult = await session.executeWrite((tx) => tx.run(readQuery));
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+    return false;
+  } finally {
+    await session.close();
+  }
+}
+
+async function getMessages(classId, res) {
+  let session = driver.session();
+  try {
+    const readQuery = `MATCH (u:User)-[r:MESSAGE]->(c:Class {id: "${classId}"}) RETURN u.username, r.message`;
+    const readResult = await session.executeRead((tx) => tx.run(readQuery));
+    const arr = [];
+    for (let i = 0; i < readResult.records.length; i++) {
+      const username = readResult.records[i].get(0);
+      const message = readResult.records[i].get(1);
+      arr.push({ username: username, message: message });
+    }
+    res.send(arr);
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+    return false;
+  } finally {
+    await session.close();
+  }
+}
+
 
 module.exports = {
   getClasses,

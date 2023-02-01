@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import Delete from "./Delete";
 import SignToClass from "./UserFunctions/SignToClass";
 import UnSignFromClass from "./UserFunctions/UnSign";
+import Comments from "./Comments";
+
 // import Chat from "../Chat/Chatt";
 
 export default function Class({ obj, role }) {
@@ -86,6 +88,7 @@ export default function Class({ obj, role }) {
       <div className="flex justify-between"></div>
 
       {role === "user" && participant_edit_buttons}
+      {/* <Comments id={obj.id} /> */}
     </div>
   );
 }

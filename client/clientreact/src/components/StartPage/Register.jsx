@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 import { setToken } from "../../Auth/authSlice";
 import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
+// import bcrypt from "bcryptjs";
 
 export const schema = yup.object().shape({
   username: yup.string(),
@@ -75,7 +76,9 @@ export default function Register() {
       });
   };
   const onSubmit = async (data) => {
-    await data;
+    //data.password = await bcrypt.hash(data.password, 10);
+    // console.log(data);
+
     fetchfunction("register", data);
   };
 

@@ -9,18 +9,20 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { client, clientId } from "./MqttClient";
 
-const schema = yup.object().shape({
-  message: yup.string().required("message is required").min(1),
+export const schema = yup.object().shape({
+  message: yup.string().required("message is required"),
 });
 
 const Chat = () => {
   const [messagess, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const username = useSelector((state) => state.auth.username);
+  const [connected, setConnected] = useState(false);
 
   const clientId = "mqttjs_" + Math.random().toString(16);
 
   const host = "ws://127.0.0.1:8000/mqtt";
+
   const options = {
     keepalive: 60,
     clientId: clientId,
@@ -37,49 +39,62 @@ const Chat = () => {
       retain: false,
     },
   };
-  const client = mqtt.connect(host, options);
+  //const client = mqtt.connect(host, options);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
+    reset,
   } = useForm({
-    validationSchema: yupResolver(schema),
+    mode: "onSubmit",
+    resolver: yupResolver(schema),
   });
 
-  const sendMessage = async (data) => {
+  const client = mqtt.connect(host, options);
+
+  const sendMessage = (data) => {
     const message = data.message;
 
     const me = JSON.stringify({ username: username, message: message });
-    await client.publish("chat/lol", me);
-    console.log(me);
-    document.getElementById("message").reset();
+    client.publish("chat/lol", me);
+    const chat = document.getElementById("chat");
+    chat.scrollTo(0, 0);
+    reset();
     setMessage("");
   };
   useEffect(() => {
     client.on("connect", function () {
-      console.log("connected  " + clientId);
+      setConnected(true);
+      client.subscribe("chat/lol");
     });
-    client.subscribe("chat/lol");
   }, []);
-
-  client.on("message", function (id, message, packet) {
-    console.log(packet);
-    const b = message.toString();
-    const mess = JSON.parse(b);
-    setMessages((prev) => [...prev, mess]);
+  client.on("message", function (topic, message) {
+    const msg = JSON.parse(message.toString());
+    console.log(topic, msg);
+    //);
+    setMessages((prev) => [...prev, msg]);
   });
 
   useEffect(() => {
     const chat = document.getElementById("chat");
-    chat.scrollTop = chat.scrollHeight;
+    if (chat) {
+      chat.scrollTo(0, chat.scrollHeight);
+    }
     return () => {};
   }, [messagess]);
 
   return (
     <>
       <Navbar />
-      <div className="  p-4 w-[700px] mx-auto bg-slate-400    bg-opacity-50">
+      <div className="  p-4 w-[700px] mx-auto bg-slate-400   rounded-3xl bg-opacity-50">
+        {connected ? (
+          <div className="  text-green  text-center">Connected</div>
+        ) : (
+          <div className="text-red-500 text-center">Not Connected</div>
+        )}
+
         <div
           id="chat"
           className=" overflow-scroll  h-80 p-3  border-spacing-4  bg-slate-200"
@@ -111,6 +126,11 @@ const Chat = () => {
             </svg>
           </button>
         </form>
+        {errors.message && (
+          <p className="text-red-500 text-xs italic">
+            Nie możesz wysłać pustej wiadomości
+          </p>
+        )}
       </div>
     </>
   );
