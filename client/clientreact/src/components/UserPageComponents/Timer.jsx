@@ -24,12 +24,15 @@ export default function Timer() {
       className="  h-min w-90 mx-auto flex flex-col  w-max  text-pink-600 my-10"
       id="timer"
     >
-      <h2>Nie czekaj zapisz sie juz dziś</h2>
-      <h2 className="   text-center text-pink-600">Cenny czas mija</h2>
-      <h2 className="text-center">
-        <span>{time[0]}</span>
-        <span className=" text-pink-600">{time[1]}</span>
-      </h2>
+      {/* <img /> */}
+      <div className="text">
+        <h2>Nie czekaj zapisz sie juz dziś</h2>
+        <h2>Cenny czas mija</h2>
+        <h2 className="text-center">
+          <span>{time[0]}</span>
+          <span>{time[1]}</span>
+        </h2>
+      </div>
     </div>
   );
 }
