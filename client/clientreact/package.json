@@ -55,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@types/mqtt": "^2.5.0",
     "sass": "^1.57.1",
     "tailwindcss": "^3.2.4"
   }

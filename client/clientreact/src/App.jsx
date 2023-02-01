@@ -15,13 +15,13 @@ import Chat from "./components/UserPageComponents/Chat/Chat";
 function App() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-    if (!token && window.location.pathname !== "/") {
-      navigate("/whops", { replace: true });
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const cookies = new Cookies();
+  //   const token = cookies.get("token");
+  //   if (!token && window.location.pathname !== "/") {
+  //     navigate("/whops", { replace: true });
+  //   }
+  // }, [navigate]);
 
   return (
     <Routes>
@@ -31,6 +31,7 @@ function App() {
       <Route path="/myclasses/:id" element={<EditClass />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/chat" element={<Chat />} />
+
       <Route
         path="/whops"
         element={
