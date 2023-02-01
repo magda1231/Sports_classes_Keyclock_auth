@@ -20,6 +20,7 @@ const {
 } = require("./neo4jfunctions");
 
 const { v4: uuidv4 } = require("uuid");
+const { isObject } = require("util");
 let driver = neo4j.driver(
   "neo4j+s://08b226e6.databases.neo4j.io",
   neo4j.auth.basic("neo4j", "cg2rKSbSzfAUnZ0_JzEMR6e_Fs46qvQty3cUeK1ynPA")
@@ -71,13 +72,8 @@ client.on("connect", function () {
   client.on("message", function (topic, message) {
     //console.log(message.toString());
     console.log(message.toString());
-    // Send message to all connected clients
-    //AddMesssage(message.toString(), client.options.clientId);
-    //io.emit("new comment", message.toString());
-
-    //console.log message and client id that sent it
   });
-  //every 5 seconds send message
+
   setInterval(function () {
     client.publish(
       "chat/lol",
@@ -85,68 +81,11 @@ client.on("connect", function () {
     );
   }, 5000);
 });
+client.subscribe("/time");
+setInterval(function () {
+  client.publish("/time", new Date().toLocaleTimeString());
+}, 1000);
 
-// //const express = require('express');
-// // const app = express();
-// const server = require("http").Server(app);
-// //onst io = require("socket.io")(server);
-// const io = require("socket.io")(server, {
-//   cors: {
-//     origin: "http://localhost:3000",
-//   },
-// });
-
-// app.use(express.json());
-
-// io.on("connection", (socket) => {
-//   // console.log("a user connected");
-
-//   socket.on("new comment", (comment) => {
-//     io.emit("new comment", "lol");
-//     console.log(comment);
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("user disconnected");
-//   });
-// });
-
-//get from socket broadkast comment and console.log it
-
-// io.on("connection", (socket) => {
-//   // console.log("a user connected");
-
-//   socket.on("join room", (roomId) => {
-//     socket.join(roomId);
-//   });
-//   socket.on("new comment", (comment, roomId) => {
-//     io.sockets.in(roomId).emit("new comment", comment);
-//     console.log(comment);
-//   });
-
-//   socket.on("disconnect", () => {
-//     // console.log("user disconnected");
-//   });
-// });
-//getting emit to "5"
-// io.on("connection", (socket) => {
-//   // console.log("a user connected");
-//   socket.on("join room", (roomId) => {
-//     console.log("roomId", roomId);
-//     socket.join(roomId);
-//   });
-//   socket.on("new comment", (comment, roomId) => {
-//     io.sockets.in(roomId).emit("new comment", comment);
-//     console.log(comment);
-//   });
-//   socket.on("disconnect", () => {
-//     // console.log("user disconnected");
-//   });
-// });
-
-// server.listen(3003, () => {
-//   console.log("Server started on port 3000");
-// });
 app.listen(3003, () => {
   console.log("Server is running on port 3003");
 });

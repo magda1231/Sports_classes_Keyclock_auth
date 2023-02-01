@@ -350,3 +350,17 @@ img {
   color: #6d1b2f;
   font-size: 0.8rem;
 }
+
+#timer {
+  background-image: url("photo3.jpg");
+  width: 100%;
+  height: 16rem;
+  // photo opacity
+  //cover
+  //opacity
+  background-repeat: no-repeat;
+  background-blend-mode: saturation;
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-position: center;
+}
