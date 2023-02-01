@@ -7,7 +7,6 @@ const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 
 async function getClasses(user, res) {
-  // console.log("user", user.username);
   let session = driver.session();
   const arr = [];
   try {
@@ -19,14 +18,12 @@ async function getClasses(user, res) {
         arr.push(record.get(0).properties)
       );
     } else if (user.role == "user") {
-      console.log("user", user.username);
       const readQuery = `MATCH (u:User {username: "${user.username}"})-[:REGISTER]->(c:Class)RETURN c`;
       const readResult = await session.executeRead((tx) => tx.run(readQuery));
 
       const result = readResult.records.forEach((record) =>
         arr.push(record.get(0).properties)
       );
-      console.log("arr", arr);
     }
 
     res.send(arr);
@@ -40,7 +37,6 @@ async function getClasses(user, res) {
 }
 
 async function createClass(user, classcreated, res) {
-  console.log(user, classcreated);
   let session = driver.session();
   try {
     const readcclass = `MATCH (u:Class {name: "${classcreated.name}"}) RETURN u`;
@@ -138,6 +134,23 @@ async function getAllClasses(res) {
     const result = readResult.records.forEach((record) =>
       arr.push(record.get(0).properties)
     );
+    //code for getting the number of registered users and mapping it into array properties
+    //const readQuery2 = `MATCH (c:Class)<-[r:REGISTERED]-(u:User) RETURN u , count(u)`;
+
+    for (let i = 0; i < arr.length; i++) {
+      const readQuery2 = `MATCH (c:Class {id: "${arr[i].id}"})<-[r:REGISTER]-(u:User) RETURN count(u)`;
+      const readResult2 = await session.executeRead((tx) => tx.run(readQuery2));
+      const registered = readResult2.records[0].get(0).low;
+      // console.log("registered", registered);
+      arr[i].registered = registered;
+    }
+    //console.log("arr", arr);
+
+    //code for getting the number of registered users
+    // const readQuery2 = `MATCH (c:Class)<-[r:REGISTERED]-(u:User) RETURN u, count(u)`;
+    // const readResult2 = await session.executeRead((tx) => tx.run(readQuery2));
+    // console.log("readResult2", readResult2.records);
+
     res.send(arr);
   } catch (error) {
     console.error(`Something went wrong: ${error}`);
@@ -201,10 +214,20 @@ async function findPerson(user, res) {
 async function RegisterToClass(user, id, res) {
   let session = driver.session();
   try {
+    //check if user isnt already registered
+    const readQuery2 = `MATCH (u:User {username: "${user}"})-[r:REGISTER]->(c:Class {id: "${id}"}) RETURN c`;
+    const readResult2 = await session.executeRead((tx) => tx.run(readQuery2));
+    if (readResult2.records.length > 0) {
+      console.log("user already registered");
+      res.sendStatus(409);
+      return false;
+    }
+
     const readQuery = `MATCH (u:User {username: "${user}"})
     MATCH (c:Class {id: "${id}"})
     CREATE (u)-[:REGISTER]->(c) RETURN c`;
     const readResult = await session.executeWrite((tx) => tx.run(readQuery));
+
     res.sendStatus(200);
   } catch (error) {
     console.error(`Something went wrong: ${error}`);
@@ -217,11 +240,9 @@ async function RegisterToClass(user, id, res) {
 async function UnSignFromClass(user, id, res) {
   let session = driver.session();
   try {
-    const readQuery = `MATCH (u:User {username: "${user}"})
-    MATCH (c:Class {id: "${id}"})
-    MATCH (u)-[r:REGISTERED]->(c)
-    DELETE r RETURN c`;
+    const readQuery = `MATCH (n:User{username:"${user}"})-[r:REGISTER]->(c:Class{id: "${id}"}) DELETE r`;
     const readResult = await session.executeWrite((tx) => tx.run(readQuery));
+
     res.sendStatus(200);
   } catch (error) {
     console.error(`Something went wrong: ${error}`);
@@ -230,6 +251,12 @@ async function UnSignFromClass(user, id, res) {
     await session.close();
   }
 }
+// const AddMessage = async (message, res) => {
+//   let session = driver.session();
+//   try {
+//    //chat id
+//     const chatId = message.chatId;
+//     //user id
 
 module.exports = {
   getClasses,
