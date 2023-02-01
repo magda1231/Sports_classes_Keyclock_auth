@@ -70,6 +70,9 @@ export default function Navbar() {
           <li>
             <Link to="/myclasses">Moje zajęcia</Link>
           </li>
+          <li>
+            <Link to="/chat">Czat</Link>
+          </li>
         </ul>
         <ul>
           <li>

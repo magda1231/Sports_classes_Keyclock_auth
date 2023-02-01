@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
+// import { useLayoutEffect } from "react";
 import ListClasses from "./Classes/ListClasses";
-
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMain } from "../../ActionsReducers/API_Actions";
 import { Refresh } from "../../ThemeContext/RefreshContext";
@@ -12,7 +12,7 @@ export default function Main() {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  useMemo(() => {
     dispatch(fetchMain());
   }, [dispatch, refresh]);
   return (
@@ -24,5 +24,5 @@ export default function Main() {
       {/* </div> */}
     </>
   );
-  // return <ListClasses lista={res} />;
+  //return <ListClasses lista={res} />;
 }

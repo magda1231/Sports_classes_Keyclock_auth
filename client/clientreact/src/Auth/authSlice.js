@@ -12,8 +12,7 @@ const authSlice = createSlice({
     setToken(state, action) {
       console.log(action.payload);
       state.role = action.payload.role;
-      // state.username.action.payload.username;
-      console.log(state.role);
+      state.username = action.payload.username;
     },
 
     clearToken(state, action) {

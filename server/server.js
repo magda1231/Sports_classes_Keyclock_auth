@@ -6,6 +6,8 @@ const cors = require("cors");
 const neo4j = require("neo4j-driver");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const mqtt = require("mqtt");
+
 const {
   getClasses,
   createClass,
@@ -40,6 +42,49 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+//const client = mqtt.connect("ws://127.0.0.1:8000/mqtt");
+const clientId = "mqttjs_" + Math.random().toString(16).substr(2, 8);
+const host = "ws://127.0.0.1:8000/mqtt";
+const options = {
+  keepalive: 60,
+  clientId: clientId,
+  protocolId: "MQTT",
+  protocolVersion: 4,
+  clean: true,
+  reconnectPeriod: 1000,
+  connectTimeout: 30 * 1000,
+  will: {
+    topic: "WillMsg",
+    payload: "Connection Closed abnormally..!",
+    id: clientId,
+    qos: 0,
+    retain: false,
+  },
+};
+const client = mqtt.connect(host, options);
+
+client.on("connect", function () {
+  client.subscribe("chat/lol");
+  console.log("connected");
+  //display message
+  client.on("message", function (topic, message) {
+    //console.log(message.toString());
+    console.log(message.toString());
+    // Send message to all connected clients
+    //AddMesssage(message.toString(), client.options.clientId);
+    //io.emit("new comment", message.toString());
+
+    //console.log message and client id that sent it
+  });
+  //every 5 seconds send message
+  setInterval(function () {
+    client.publish(
+      "chat/lol",
+      JSON.stringify({ username: "server", message: "hello" })
+    );
+  }, 5000);
+});
 
 // //const express = require('express');
 // // const app = express();
@@ -103,7 +148,7 @@ app.use(cookieParser());
 //   console.log("Server started on port 3000");
 // });
 app.listen(3003, () => {
-  console.log("Server is running on port 3001");
+  console.log("Server is running on port 3003");
 });
 
 app.post("/login", (req, res) => {
@@ -207,7 +252,6 @@ app.put("/myclasses", authenticateToken, (req, res) => {
 });
 
 app.post("/createclass", authenticateToken, (req, res) => {
-  console.log(req.body);
   createClass(req.user.username, req.body, res);
 });
 
