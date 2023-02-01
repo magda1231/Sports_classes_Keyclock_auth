@@ -351,16 +351,37 @@ img {
   font-size: 0.8rem;
 }
 
-#timer {
-  background-image: url("photo3.jpg");
-  width: 100%;
-  height: 16rem;
-  // photo opacity
-  //cover
-  //opacity
-  background-repeat: no-repeat;
-  background-blend-mode: saturation;
-  background-size: cover;
-  background-color: rgba(0, 0, 0, 0.5);
-  background-position: center;
-}
+// #timer {
+//   width: 100%;
+//   height: 16rem;
+//   background-repeat: no-repeat;
+//   position: relative;
+//   //background-size: cover;
+//   //background-color: rgba(0, 0, 0, 0.5);
+//   //background-position: center;
+//   // img {
+//   //   //background-image: url("photo3.jpg");
+//   //   width: 100%;
+//   //   height: 16rem;
+//   //   background-repeat: no-repeat;
+//   //   opacity: 0.5;
+//   //   background-size: cover;
+//   //   position: absolute;
+//   //   top: 0;
+//   //   bottom: 0;
+//   // }
+//   .text {
+//     position: absolute;
+//     top: 0;
+//     bottom: 0;
+//     left: 0;
+//     right: 0;
+//     // transform: translate(-50%, -50%);
+
+//     font-size: 2rem;
+//     font-weight: bold;
+//     span {
+//       color: #f8378a;
+//     }
+//   }
+// }
