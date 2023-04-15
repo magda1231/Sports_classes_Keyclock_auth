@@ -6,7 +6,7 @@ Magdalena Makaro
 
 ## Zdjęcie strony logowania
 
-![Strona logowania](~/Desktop/startpage.png)
+![Strona logowania](/Sport-classes-app-PSW/startpage.png)
 
 ## Skills i developed in this project
 
