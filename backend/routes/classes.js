@@ -9,7 +9,6 @@ routes.route("/userpage").get(authenticateToken, async (req, res) => {
   let session = driver.session();
   try {
     const arr = [];
-
     const readQuery = `MATCH (c:Class) RETURN c`;
     const readResult = await session.executeRead((tx) => tx.run(readQuery));
 
@@ -39,57 +38,43 @@ routes.route("/userpage").get(authenticateToken, async (req, res) => {
   }
 });
 
-routes.route("/userpage/random").get(async (req, res) => {
-  let session = driver.session();
-  try {
-    const arr = [];
-    const readQuery = `MATCH (c:Class) RETURN apoc.coll.randomItems(collect(c), 10)`;
-    const readResult = await session.executeRead((tx) => tx.run(readQuery));
-    const result = readResult.records[0]
-      .get(0)
-      .forEach((record) => arr.push(record.properties));
-    res.status(200).send(arr);
-  } catch (error) {
-    res.sendStatus(500);
-  } finally {
-    await session.close();
-  }
-});
-
 routes.route("/myclasses").get(authenticateToken, async (req, res) => {
   let session = driver.session();
   const arr = [];
   console.log(req.user.username);
+  console.log(req.user.role);
   try {
     if (req.user.role == "trainer") {
-      const readQuery = `MATCH (u:User {username: $username})-[:CREATED]->(c:Class)RETURN c`;
+      const readQuery = `MATCH (u:User {username:$username})-[:CREATED]->(c:Class)RETURN c`;
+      const readResult = await session.executeRead((tx) =>
+        tx.run(readQuery, { username: req.user.username })
+      );
+      console.log(readResult.records);
+      console.log("aaa");
+      const result = readResult.records.forEach((record) =>
+        arr.push(record.get(0).properties)
+      );
+    } else if (req.user.role == "user") {
+      console.log("kkk");
+      console.log("bbb");
+      console.log("aaa", req.user.username);
+      const readQuery = `MATCH (u:User {username: $username})-[:REGISTER]->(c: Class)RETURN c`;
       const readResult = await session.executeRead((tx) =>
         tx.run(readQuery, {
           username: req.user.username,
         })
       );
 
-      const result = readResult.records.forEach((record) =>
-        arr.push(record.get(0).properties)
-      );
-    } else if (req.user.role == "user") {
-      const readQuery = `MATCH (u:User {username: $username})-[:REGISTER]->(c:Class)RETURN c`;
-      const readResult = await session.executeRead((tx) =>
-        tx.run(readQuery, {
-          username: user.username,
-        })
-      );
-
+      console.log(readResult.records);
       const result = readResult.records.forEach((record) =>
         arr.push(record.get(0).properties)
       );
     }
-
     res.send(arr);
   } catch (error) {
+    console.error(`Something went wrong: ${error}`);
     //console.error(`Something went wrong: ${error}`);
     res.sendStatus(500);
-
     return false;
   } finally {
     await session.close();

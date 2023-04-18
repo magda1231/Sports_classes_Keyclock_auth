@@ -14,14 +14,15 @@ user.route("/login").post(async (req, res) => {
   let session = driver.session();
   console.log("user", user);
   try {
-    const readQuery = `MATCH(p:User {username:'$username',password: '$password'}) RETURN p`;
+    const readQuery = `MATCH(p:User {username:$username,password:$password}) RETURN p`;
     const readResult = await session.executeRead((tx) =>
       tx.run(readQuery, {
         username: user.username,
         password: user.password,
       })
     );
-    console.log("aaa", readResult.records.get(0));
+    console.log(user);
+    console.log("aaa", readResult.records);
     if (readResult.records.length > 0) {
       console.log(readResult.records.length);
       const role = readResult.records[0].get(0).properties.role;
@@ -40,6 +41,7 @@ user.route("/login").post(async (req, res) => {
       res.sendStatus(403);
     }
   } catch (error) {
+    console.log(error);
     res.sendStatus(500);
     return false;
   } finally {
@@ -58,13 +60,14 @@ user.route("/register").post(async (req, res) => {
   };
 
   try {
-    const checkUsername = `MATCH (p:User {username:'$name'}) RETURN p`;
+    const checkUsername = `MATCH (p:User {username: $username}) RETURN p`;
     const usernameCheckResult = await session.executeRead((tx) =>
-      tx.run(checkUsername, { name: user.username })
+      tx.run(checkUsername, { username: user.username })
     );
-    const checkEmail = `MATCH (p:User {email:'$email'}) RETURN p`;
+
+    const checkEmail = `MATCH (p:User {email: $email}) RETURN p`;
     const userEmailCheck = await session.executeRead((tx) =>
-      tx.run(checkUsername, { email: user.email })
+      tx.run(checkEmail, { email: user.email })
     );
 
     if (
@@ -75,7 +78,7 @@ user.route("/register").post(async (req, res) => {
       return;
     }
     const id = uuidv4();
-    const readQuery = `CREATE (p:User{username:'$username',password:$password, role:$role, id:$id, email:$email }) RETURN p`;
+    const readQuery = `CREATE (p:User{username:$username,password:$password, role:$role, id:$id, email:$email }) RETURN p`;
     const readResult = await session.executeWrite((tx) =>
       tx.run(readQuery, {
         username: user.username,
@@ -107,7 +110,7 @@ user.route("/register").post(async (req, res) => {
     res.status(201).send({ accessToken: accessToken });
   } catch (error) {
     res.sendStatus(500);
-    console.log(error);
+    console.log(error.message);
   } finally {
     await session.close();
   }
