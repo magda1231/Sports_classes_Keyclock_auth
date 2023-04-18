@@ -26,20 +26,4 @@ comments.route("/comments/:id").get(async (req, res) => {
   }
 });
 
-comments.route("/reaction/:id").get(async (req, res) => {
-  const id = req.params.id;
-  let session = driver.session();
-  try {
-    const readQuery = `MATCH (c:Class)-[r:COMMENT]->(m:Comment {id: "${commentid}"}) RETURN m.likes, m.dislikes`;
-    const readResult = await session.executeRead((tx) => tx.run(readQuery));
-    const likes = parseFloat(readResult.records[0].get(0));
-    const dislikes = parseFloat(readResult.records[0].get(1));
-  } catch (error) {
-    res.status(500);
-    return false;
-  } finally {
-    session.close();
-  }
-});
-
 module.exports = comments;
