@@ -9,19 +9,14 @@ services:
       - 7687:7687
     # env_file:
     #   - backend/.env.neo4j
-    volumes:
-      - ./volumes/neo4j/db/data:/data
-      - ./volumes/neo4j/db/conf:/conf
-      - ./volumes/neo4j/db/logs:/logs
-      - ./volumes/neo4j/db/plugins:/plugins
-
     environment:
       - NEO4J_AUTH=neo4j/alamakota
 
   keycloak:
     container_name: keycloak_service
     image: quay.io/keycloak/keycloak:21.1.1
-    command: start-dev
+    command:
+      - start-dev
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin

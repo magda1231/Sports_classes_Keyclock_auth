@@ -5,13 +5,13 @@
   "resource": "backend",
   "verify-token-audience": false,
   "credentials": {
-    "secret": "TWzb9RGfxczSykay3Mb8SezmzsXzBGjz"
+    "secret": "cOvwQ58LDWpGfyQNxmPIIuQBgQGjoRGJ"
   },
   "use-resource-role-mappings": true,
   "confidential-port": 0,
   "policy-enforcer": {},
   "CLIENT_ID": "backend",
-  "CLIENT_DB_ID": "TWzb9RGfxczSykay3Mb8SezmzsXzBGjz",
+  "CLIENT_DB_ID": "cOvwQ58LDWpGfyQNxmPIIuQBgQGjoRGJ",
   "GRANT_TYPE": "password",
   "GRANT_TYPE_PAT": "client_credentials",
   "USERNAME_ADMIN": "admin",
