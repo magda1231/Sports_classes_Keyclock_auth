@@ -11,7 +11,7 @@ Jest to przerobiony projekt z poprzedniego semestru
 Jest to aplikacja do zarządzania zajęciami sportowymi. Umożliwia tworzenie, edycję i usuwanie zajęć jako nauczyciel.
 Pozwala również studentom zapisać się na zajęcia i zostawić komentarz pod zajęciami, co nie jest dostępne
 dla roli nauczyciela. Zarówno dla nauczycieli, jak i studentów możliwe jest przeglądanie listy zajęć
-i ich szczegółów oraz tworzenie nowego konta. Aplikacja posiada równiez panel administracyjny, w którym
+i ich szczegółów oraz tworzenie nowego konta. Aplikacja posiada równiez panel administracyjny niedostepny dla normalnych uzytkowników, w którym
 administrator może usuwać zajęcia użytkowników.
 
 # Instrukcja uruchomienia
