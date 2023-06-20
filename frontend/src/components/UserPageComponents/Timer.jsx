@@ -3,18 +3,18 @@ import { client } from "./Chat/MqttClient";
 export default function Timer() {
   const [time, setTime] = useState(0);
 
-  useEffect(() => {
-    client.subscribe("/time", { qos: 0 });
-    client.on("message", (topic, message) => {
-      if (topic === "/time") {
-        const b = message.toString().slice(-2);
+  // useEffect(() => {
+  //   client.subscribe("/time", { qos: 0 });
+  //   client.on("message", (topic, message) => {
+  //     if (topic === "/time") {
+  //       const b = message.toString().slice(-2);
 
-        const a = message.toString().slice(0, -2);
+  //       const a = message.toString().slice(0, -2);
 
-        setTime([a, b]);
-      }
-    });
-  }, []);
+  //       setTime([a, b]);
+  //     }
+  //   });
+  // }, []);
 
   return (
     <div

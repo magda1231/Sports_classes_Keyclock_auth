@@ -5,17 +5,27 @@ import ContextThemeButton from "../../Contexts/ContextThemeButton";
 import { useTheme } from "../../Contexts/ThemeContext";
 import { clearToken } from "../../Auth/authSlice";
 import { useDispatch } from "react-redux";
+import { useKeycloak } from "@react-keycloak/web";
 
 export default function Navbar() {
   const cookies = new Cookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { keycloak } = useKeycloak();
+
   const handleLogout = () => {
     cookies.remove("token");
     dispatch(clearToken());
-    navigate("/");
+    keycloak.logout();
   };
+
+  console.log(keycloak.authenticated);
+
+  if (!keycloak.authenticated) {
+    navigate("/");
+    window.location.href = "/";
+  }
   const { theme } = useTheme();
   return (
     <div className="Navbar">

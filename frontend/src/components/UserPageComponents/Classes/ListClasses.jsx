@@ -2,11 +2,25 @@ import Class from "./Class";
 import { useEffect, useState, useMemo, useRef, useLayoutEffect } from "react";
 import { useSelector } from "react-redux";
 import { Refresh } from "../../../Contexts/RefreshContext";
+import { useKeycloak } from "@react-keycloak/web";
+import jwtDecode from "jwt-decode";
 
 const ListProducts = ({ lista }) => {
   const inputRef = useRef(null);
+  const { keycloak } = useKeycloak();
+  const token = keycloak.token;
+  //const decodedToken = Buffer.from(token, "base64").toString("utf-8");
+  // console.log(decodedToken.role);
+  let role;
+  const roles = jwtDecode(token).realm_access.roles;
+  if (roles.includes("trainer")) {
+    role = "trainer";
+  } else if (roles.includes("user")) {
+    role = "user";
+  }
+  console.log("ala ma kota i token");
 
-  const role = useSelector((state) => state.auth.role);
+  // decode tocken
 
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("asc");

@@ -7,9 +7,11 @@ import ThemeProvider from "./Contexts/ThemeContext";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store/store";
 import RefreshProvider from "./Contexts/RefreshContext";
+import keycloak from "./Keycloack";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <ReactKeycloakProvider authClient={keycloak}>
     <BrowserRouter>
       <ThemeProvider>
         <RefreshProvider>
@@ -21,5 +23,5 @@ root.render(
         </RefreshProvider>
       </ThemeProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </ReactKeycloakProvider>
 );

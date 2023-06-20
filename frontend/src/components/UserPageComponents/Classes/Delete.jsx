@@ -1,7 +1,9 @@
 import Cookies from "universal-cookie";
 import { Refresh } from "../../../Contexts/RefreshContext";
+import { useKeycloak } from "@react-keycloak/web";
 
 export default function Delete(props) {
+  const { keycloak, initialized } = useKeycloak();
   const cookies = new Cookies();
   const token = cookies.get("token");
   //console.log("aa");
@@ -10,10 +12,10 @@ export default function Delete(props) {
   // console.log(refresh, "refresh");
 
   const handleDelete = () => {
-    fetch(`http://localhost:3003/myclasses`, {
+    fetch(`http://localhost:5010/myclasses`, {
       method: "DELETE",
       headers: {
-        Authorization: "Bearer " + token.accessToken,
+        Authorization: "Bearer " + keycloak.token,
         "content-type": "application/json",
       },
       body: JSON.stringify({ id: props.id }),

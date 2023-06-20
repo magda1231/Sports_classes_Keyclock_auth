@@ -8,8 +8,6 @@ import { useTheme } from "../../Contexts/ThemeContext";
 
 export default function UserPage() {
   const navigate = useNavigate();
-  const cookies = new Cookies();
-  const token = cookies.get("token");
 
   const { theme } = useTheme();
   useEffect(() => {
@@ -29,8 +27,9 @@ export default function UserPage() {
         }`}
       </style>
 
-      {token != null && <Navbar />}
-      {token == null && navigate("/whopsnoaccess")}
+      {/* {token != null && <Navbar />} */}
+      <Navbar />
+      {/* {token == null && navigate("/whopsnoaccess")} */}
       <div className="Main">
         <Main />
       </div>

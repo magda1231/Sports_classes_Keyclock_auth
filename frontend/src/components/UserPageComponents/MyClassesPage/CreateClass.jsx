@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Refresh } from "../../../Contexts/RefreshContext";
+import { useKeycloak } from "@react-keycloak/web";
 
 const today = new Date();
 
@@ -22,6 +23,7 @@ const schema = Yup.object().shape({
 });
 
 export default function CreateClass() {
+  const { keycloak, initialized } = useKeycloak();
   const {
     register,
     handleSubmit,
@@ -33,16 +35,19 @@ export default function CreateClass() {
     resolver: yupResolver(schema),
   });
 
+  const token = keycloak.token;
+  const role = keycloak.tokenParsed.realm_access.roles[3];
+
   const { refresh, setRefresh } = Refresh();
 
   const onSubmit = (data) => {
     const cookies = new Cookies();
     const token = cookies.get("token");
     console.log();
-    fetch(`http://localhost:3003/createclass`, {
+    fetch(`http://localhost:5010/createclass`, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token.accessToken,
+        Authorization: "Bearer " + keycloak.token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),

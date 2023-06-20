@@ -4,7 +4,6 @@ import ListClasses from "./Classes/ListClasses";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMain } from "../../ActionsReducers/API_Actions";
 import { Refresh } from "../../Contexts/RefreshContext";
-import Timer from "./Timer";
 
 export default function Main() {
   const { mainPageClasses, error, loading } = useSelector((state) => state.get);
@@ -18,7 +17,7 @@ export default function Main() {
   }, [dispatch, refresh]);
   return (
     <>
-      <Timer />
+      {/* <Timer /> */}
       {/* <div className=""> */}
       {loading && <h1>Loading...</h1>}
       {error ? <h1>Error: {error}</h1> : null}

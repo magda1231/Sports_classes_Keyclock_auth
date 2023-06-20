@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Refresh } from "../../../Contexts/RefreshContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../Navbar";
+import { useKeycloak } from "@react-keycloak/web";
 
 const today = new Date();
 
@@ -27,6 +28,10 @@ export default function EditClass() {
   const id = useParams().id;
   const navigate = useNavigate();
 
+  const { keycloak, initialized } = useKeycloak();
+  const token = keycloak.token;
+  const role = keycloak.tokenParsed.realm_access.roles[3];
+
   const {
     register,
     handleSubmit,
@@ -44,7 +49,7 @@ export default function EditClass() {
     const cookies = new Cookies();
     const token = cookies.get("token");
     console.log();
-    fetch(`http://localhost:3003/myclasses/${id}`, {
+    fetch(`http://localhost:5010/myclasses/${id}`, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token.accessToken,

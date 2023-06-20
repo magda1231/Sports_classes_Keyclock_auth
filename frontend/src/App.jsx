@@ -6,32 +6,67 @@ import MyClasses from "./components/UserPageComponents/MyClassesPage/Myclasses";
 import EditClass from "./components/UserPageComponents/Classes/EditClass";
 import { useNavigate } from "react-router-dom";
 
-import { useEffect } from "react";
 import MyPage from "./components/UserPageComponents/Profile/MyPage";
-import Cookies from "universal-cookie";
 
 import Chat from "./components/UserPageComponents/Chat/Chat";
+
+import PrivateRoute from "./helpers/PrivateRoute";
 
 function App() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-    if (!token && window.location.pathname !== "/") {
-      navigate("/whops", { replace: true });
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const cookies = new Cookies();
+  //   const token = cookies.get("token");
+  // //   if (!token && window.location.pathname !== "/") {
+  // //     navigate("/whops", { replace: true });
+  // //   }
+  // // }, [navigate]);
 
   return (
     <Routes>
       <Route path="/" element={<StartPage />} />
-      <Route path="/userpage" element={<UserPage />} />
-      <Route path="/myclasses" element={<MyClasses />} />
-      <Route path="/myclasses/:id" element={<EditClass />} />
-      <Route path="/mypage" element={<MyPage />} />
-      <Route path="/chat" element={<Chat />} />
 
+      <Route
+        path="/userpage"
+        element={
+          <PrivateRoute>
+            <UserPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/myclasses"
+        element={
+          <PrivateRoute>
+            <MyClasses />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/myclasses/:id"
+        element={
+          <PrivateRoute>
+            <EditClass />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mypage"
+        element={
+          <PrivateRoute>
+            <MyPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/chat"
+        element={
+          <PrivateRoute>
+            <Chat />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/whops"
         element={

@@ -1,13 +1,12 @@
 import React from "react";
+import "../../style/styles.scss";
 import Login from "./Login";
-import Register from "./Register";
 
 const StartPage = () => {
   return (
     <div className="body">
       <div className="container">
         <div className="left-side">
-          {/* <Login /> */}
           <div className="info">
             <h1>Szukasz ćwiczeń w twojej okolicy?</h1>
             <p>
@@ -30,9 +29,8 @@ const StartPage = () => {
             Dołącz do nas <br /> już dziś!
           </h1>
           <div className="button">
-            <button> ZALOGUJ SIĘ</button>
+            <Login />
           </div>
-          {/* <Register /> */}
         </div>
       </div>
     </div>

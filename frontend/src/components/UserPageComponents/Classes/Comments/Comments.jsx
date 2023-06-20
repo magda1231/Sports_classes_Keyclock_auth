@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CommentsList from "./CommentsList";
+import { useKeycloak } from "@react-keycloak/web";
 
 export const schema = yup.object().shape({
   message: yup.string().required("message is required"),
@@ -18,27 +19,7 @@ const Comments = ({ id }) => {
   const [message, setMessage] = useState("");
   const username = useSelector((state) => state.auth.username);
   const [connected, setConnected] = useState(false);
-
-  const clientId = "mqttjs_" + Math.random().toString(16);
-
-  const host = "ws://127.0.0.1:8000/mqtt";
-
-  const options = {
-    keepalive: 60,
-    clientId: clientId,
-    protocolId: "MQTT",
-    protocolVersion: 4,
-    clean: true,
-    reconnectPeriod: 1000,
-    connectTimeout: 30 * 1000,
-    will: {
-      topic: "WillMsg",
-      payload: "Connection Closed abnormally..!",
-      qos: 0,
-      id: clientId,
-      retain: false,
-    },
-  };
+  const { keycloak } = useKeycloak();
 
   const {
     register,
@@ -50,17 +31,12 @@ const Comments = ({ id }) => {
     resolver: yupResolver(schema),
   });
 
-  const client = mqtt.connect(host, options);
-
-  const cookies = new Cookies();
-  const token = cookies.get("token").accessToken;
-
   useEffect(() => {
     fetch(`http://localhost:3003/comments/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + keycloak.token,
       },
     })
       .then((response) => {
@@ -85,28 +61,15 @@ const Comments = ({ id }) => {
       message: message,
       id: commentid,
     });
-    client.publish(`/comments/${id}`, me);
-    console.log(me);
-
-    reset();
-    setMessage("");
+    // fetch(`http://localhost:5010/comment`, {
+    //   method: "POST",
+    //   headers: {
+    //     Authorization: "Bearer " + keycloak.token,
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // });
   };
-  useEffect(() => {
-    client.on("connect", function () {
-      setConnected(true);
-      client.subscribe(`/comments/${id}`);
-    });
-    return () => {
-      client.unsubscribe(`/comments/${id}`);
-      client.removeListener("connect", () => {});
-    };
-  }, []);
-
-  client.on("message", function (topic, message) {
-    const msg = JSON.parse(message.toString());
-
-    setMessages((prev) => [...prev, msg]);
-  });
 
   useEffect(() => {
     const chat = document.getElementById("chat");

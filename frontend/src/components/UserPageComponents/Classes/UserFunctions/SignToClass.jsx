@@ -2,6 +2,8 @@ import React from "react";
 import Cookies from "universal-cookie";
 import { useState } from "react";
 import { Refresh } from "../../../../Contexts/RefreshContext";
+import { useKeycloak } from "@react-keycloak/web";
+import keycloak from "../../../../Keycloack";
 
 export default function SignToClass({ id }) {
   const cookies = new Cookies();
@@ -12,10 +14,10 @@ export default function SignToClass({ id }) {
   const { refresh, setRefresh } = Refresh();
 
   const handleSigning = () => {
-    fetch(`http://localhost:3003/myclasses/register/${id}`, {
+    fetch(`http://localhost:5010/myclasses/register/${id}`, {
       method: "POST",
       headers: {
-        Authorization: "Bearer " + token.accessToken,
+        Authorization: "Bearer " + keycloak.token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ id }),

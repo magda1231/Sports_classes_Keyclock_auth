@@ -2,8 +2,10 @@ import React from "react";
 import Cookies from "universal-cookie";
 import { Refresh } from "../../../../Contexts/RefreshContext";
 import { useState } from "react";
+import { useKeycloak } from "@react-keycloak/web";
 
 export default function UnSignFromClass({ id }) {
+  const { keycloak, initialized } = useKeycloak();
   const cookies = new Cookies();
   const token = cookies.get("token");
 
@@ -12,10 +14,10 @@ export default function UnSignFromClass({ id }) {
   const [message, setMessage] = useState("");
 
   const handleSigning = () => {
-    fetch(`http://localhost:3003/myclasses/unsign/${id}`, {
+    fetch(`http://localhost:5010/myclasses/unsign/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: "Bearer " + token.accessToken,
+        Authorization: "Bearer " + keycloak.token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ id }),
