@@ -14,9 +14,12 @@ administrator może usuwać zajęcia użytkowników.
 
 # Instrukcja uruchomienia
 
-Uruchomienie kontenerów z Keyclockiem i bazą danych: Neo4j. (Wymagane dane obu aplikacji sa zapisane w volumenach)
+Uruchomienie kontenerów z Keyclockiem i bazą danych: Neo4j.
 
 ` docker compose up`
+
+Baza danych nie ma mozliwosci zapisania voluminu wiec po uruchomieniu docker compose
+przechodzimy na strone http://localhost:7474 i wklejamy komende z pliku neo4j.txt
 
 Odpalenie frontendu:
 
