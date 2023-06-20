@@ -1,0 +1,20 @@
+{
+  "realm": "myrealm",
+  "auth-server-url": "http://localhost:8080/",
+  "ssl-required": "external",
+  "resource": "backend",
+  "verify-token-audience": false,
+  "credentials": {
+    "secret": "YdaxWdnoSRpnuC2q0GD3EE1nRnayVN8n"
+  },
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "policy-enforcer": {},
+  "CLIENT_ID": "backend",
+  "CLIENT_DB_ID": "YdaxWdnoSRpnuC2q0GD3EE1nRnayVN8n",
+  "GRANT_TYPE": "password",
+  "GRANT_TYPE_PAT": "client_credentials",
+  "USERNAME_ADMIN": "admin",
+  "PASSWORD_ADMIN": "admin",
+  "bearer-only": true
+}

@@ -1,5 +1,5 @@
 const neo4j = require("neo4j-driver");
-const pathl = require("dotenv").config({ path: "../../.env" });
+const pathl = require("dotenv").config({ path: "./env" });
 let driver = neo4j.driver(
   process.env.URI,
   neo4j.auth.basic(process.env.USERNAME, process.env.PASSWORD)
