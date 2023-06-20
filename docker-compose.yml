@@ -1,5 +1,4 @@
 version: "3.7"
-# The different services that make up our "network" of containers
 services:
   neo:
     container_name: neo
@@ -7,8 +6,6 @@ services:
     ports:
       - 7474:7474
       - 7687:7687
-    # env_file:
-    #   - backend/.env.neo4j
     volumes:
       - ./volumes/neo4j/db/data:/data
       - ./volumes/neo4j/db/conf:/conf
