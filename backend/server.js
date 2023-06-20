@@ -23,6 +23,7 @@ async function initDriver(uri, username, password, res) {
     console.log("Connected to Neo4j");
   } catch (error) {
     res.sendStatus(500);
+    console.log("error connecting" + error);
   }
 }
 initDriver(uri, username, password);
@@ -421,6 +422,11 @@ app.delete("class/:id", keycloak.protect(["admin"]), async (req, res) => {
   } finally {
     await session.close();
   }
+});
+
+app.get("/check", async (req, res) => {
+  console.log("check");
+  res.json({ message: "gituwwaaa" });
 });
 
 app.listen(5010, () => {

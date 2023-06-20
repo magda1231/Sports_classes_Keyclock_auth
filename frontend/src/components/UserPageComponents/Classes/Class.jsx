@@ -7,8 +7,6 @@ import Comments from "./Comments/Comments";
 import { useState } from "react";
 import { useKeycloak } from "@react-keycloak/web";
 
-// import Chat from "../Chat/Chatt";
-
 export default function Class({ obj, role }) {
   const { keycloak } = useKeycloak();
   const admin_edit_buttons = (

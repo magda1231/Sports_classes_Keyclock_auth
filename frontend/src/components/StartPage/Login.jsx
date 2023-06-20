@@ -8,6 +8,48 @@ export default function Login() {
   const navigate = useNavigate();
   const { keycloak, initialized } = useKeycloak();
 
+  useEffect(() => {
+    fetch("http://localhost:5010/check", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + keycloak.token,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
+      })
+      .then((res) => {
+        console.log("local");
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log("local" + err);
+      });
+    fetch("http://backendd:5010/check", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
+      })
+      .then((res) => {
+        console.log(res);
+        console.log("backed");
+      })
+      .catch((err) => {
+        console.log("backed" + err);
+      });
+  }, []);
+
   const handleClick = () => {
     keycloak.login();
   };
