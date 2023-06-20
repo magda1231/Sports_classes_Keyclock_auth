@@ -65,12 +65,6 @@ app.use(
   })
 );
 
-// app.use(require("./routes/classes"));
-// app.use(require("./routes/comments"));
-// app.use(require("./routes/user"));
-// app.use(require("./routes/classesregister"));
-// driver.close();
-
 const getrole = (roles) => {
   if (roles.includes("trainer")) {
     return "trainer";
@@ -349,7 +343,7 @@ app.delete(
   }
 );
 
-app.get("/comments/:id", keycloak.protect(), async (req, res) => {
+app.get("/comments/:id", keycloak.protect(["user"]), async (req, res) => {
   console.log("comments");
   const id = req.params.id;
   let session = driver.session();
@@ -405,6 +399,24 @@ app.post("/comment", keycloak.protect(["user"]), async (req, res) => {
     res.sendStatus(201);
   } catch (error) {
     console.log(error.message);
+    res.sendStatus(500);
+  } finally {
+    await session.close();
+  }
+});
+
+app.delete("class/:id", keycloak.protect(["admin"]), async (req, res) => {
+  const id = req.params.id;
+  let session = driver.session();
+  try {
+    const readQuery = `MATCH (c:Class {id: $id}) DETACH DELETE c`;
+    const readResult = await session.executeWrite((tx) =>
+      tx.run(readQuery, {
+        id: id,
+      })
+    );
+    res.sendStatus(200);
+  } catch (error) {
     res.sendStatus(500);
   } finally {
     await session.close();
