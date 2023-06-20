@@ -25,14 +25,53 @@ const Comments = ({ id }) => {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
     reset,
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
 
+  const commentid = useId();
+
+  let sent = false;
+  console.log(sent);
+
+  const sendMessage = (data) => {
+    const message = data.message;
+
+    const me = JSON.stringify({
+      username: keycloak.tokenParsed.preferred_username,
+      message: message,
+      id: commentid,
+      classid: id,
+    });
+    fetch(`http://localhost:5010/comment`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + keycloak.token,
+        "Content-Type": "application/json",
+      },
+      body: me,
+    })
+      .then((res) => {
+        console.log(res);
+        console.log("ala");
+      })
+      .catch((err) => {
+        console.log(err);
+        setError("message", {
+          message: "Something went wrong",
+          type: "send",
+        }).then(() => {
+          sent = !sent;
+          console.log(sent);
+        });
+      });
+  };
   useEffect(() => {
-    fetch(`http://localhost:3003/comments/${id}`, {
+    console.log(sent + "alaa");
+    fetch(`http://localhost:5010/comments/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -44,33 +83,12 @@ const Comments = ({ id }) => {
       })
       .then((data) => {
         const mess = data.map((msg) => {
-          return { message: msg.message, id: msg.id };
+          return { message: msg.text, id: msg.id };
         });
         setMessages(mess);
       })
       .catch((err) => console.log(err));
-  }, [id]);
-
-  const commentid = useId();
-
-  const sendMessage = (data) => {
-    const message = data.message;
-
-    const me = JSON.stringify({
-      username: username,
-      message: message,
-      id: commentid,
-    });
-    // fetch(`http://localhost:5010/comment`, {
-    //   method: "POST",
-    //   headers: {
-    //     Authorization: "Bearer " + keycloak.token,
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(data),
-    // });
-  };
-
+  }, [id, sent]);
   useEffect(() => {
     const chat = document.getElementById("chat");
     if (chat) {
@@ -111,9 +129,21 @@ const Comments = ({ id }) => {
           </svg>
         </button>
       </form>
-      {errors.message && (
+      {errors.message && errors.type === "send" && (
         <p className="text-red-500 text-xs italic">
+          Coś poszło nie tak, spróbuj ponownie
+        </p>
+      )}
+      {/* {errors.message && errors.type !== "send" && (
+        <p className="text-red-500 text-xs italic">
+          {errors.type}
           Nie możesz opublikować pustego komentarza
+        </p>
+      )} */}
+
+      {errors.type !== "send" && errors.message && (
+        <p className="text-red-500 text-xs italic">
+          Something went wrong, try again
         </p>
       )}
     </div>
