@@ -1,54 +1,67 @@
-# Project for University classes
+# Sports classes Keyclock auth
 
 Magdalena Makaro
 
-## Project description
+# Opis projektu
 
-Aplikacja do zarządzania zajęciami sportowymi. Umożliwia tworzenie, edycję i usuwanie zajęć jako nauczyciel. Pozwala również uczestnikom zapisać się na wybrane zajęcia, zobaczyc liczbe zapisanych uczestników oraz zostawić komentarz pod zajęciami, co nie jest dostępne dla roli nauczyciela. Zarówno dla nauczycieli, jak i studentów możliwe jest przeglądanie listy zajęć i ich szczegółów oraz tworzenie nowego konta. Aplikacja posiada równie panel
+Jest to przerobiony projekt z poprzedniego semestru
 
-## Page views
+Jest to aplikacja do zarządzania zajęciami sportowymi. Umożliwia tworzenie, edycję i usuwanie zajęć jako nauczyciel.
+Pozwala również studentom zapisać się na zajęcia i zostawić komentarz pod zajęciami, co nie jest dostępne
+dla roli nauczyciela. Zarówno dla nauczycieli, jak i studentów możliwe jest przeglądanie listy zajęć
+i ich szczegółów oraz tworzenie nowego konta. Aplikacja posiada równiez panel administracyjny, w którym
+administrator może usuwać zajęcia użytkowników.
 
-### Login page view
+# Instrukcja uruchomienia
 
-![Strona logowania](photos/startpage.png)
+Uruchomienie kontenerów z Keyclockiem i bazą danych: Neo4j. (Wymagane dane obu aplikacji sa zapisane w volumenach)
 
-### Wrong user,password in login page view
+` docker compose up`
 
-<img src="photos/wrong_login.png"  width="auto" height="200">
+Odpalenie frontendu:
 
-### User main page view
+`cd frontned`
 
-##### Light mode
+`npm start`
 
-![Strona główna](photos/homepage.png)
+Frontend ma działać na porcie 3000
 
-##### Dark mode
+Odpalenie backendu:
 
-![Strona główna](photos/homepage_dark.png)
+`cd backend`
 
-### Chat view
+`node server.js`
 
-![Strona główna](photos/chat.png)
+Backend ma działać na porcie 5010
 
-<img src="photos/empty_message.png" width="auto" height="200">
+# Instrukcja użycia
 
-## Skills i developed in this project
+Mozna sie zalogowac jako:
 
-Frontend:
+#### TRENER:
 
-- tailwindcss
-- scss
-- react
-- redux
+<br/>
+login: trainer
 
-Backend:
+haslo: trainer
 
-- node.js
-- express
-- neo4j
-- jwt
+I tworzyć zajęcia lub edytowac i usuwać poprzednie
 
-Protocols:
+#### UCZESTNIK:
 
-- http
-- mqtt
+<br/>
+login: ala
+
+haslo: ala
+
+I zapisać się na zajęcia
+
+#### ADMINISTRATOR:
+
+<br/>
+login: admin
+
+haslo: aaa
+
+I usuwać zajęcia użytkowników na niedostępnym dla innych uzytkowników
+serwisu panelu administracyjnym
