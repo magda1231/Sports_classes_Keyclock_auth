@@ -32,6 +32,8 @@ Odpalenie backendu:
 
 `cd backend`
 
+`npm install`
+
 `node server.js`
 
 Backend ma działać na porcie 5010
