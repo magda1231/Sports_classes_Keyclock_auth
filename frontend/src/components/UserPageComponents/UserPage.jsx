@@ -16,9 +16,6 @@ export default function UserPage() {
 
   return (
     <>
-      {/* {isUser && <div>User</div>}
-      {isAdmin && <div>Admin</div>} */}
-
       <style>
         {`
         body{
@@ -26,7 +23,6 @@ export default function UserPage() {
             color: ${theme === "light" ? "black" : "white"};
         }`}
       </style>
-
       {/* {token != null && <Navbar />} */}
       <Navbar />
       {/* {token == null && navigate("/whopsnoaccess")} */}

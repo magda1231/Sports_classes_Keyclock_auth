@@ -20,12 +20,11 @@ export default function Navbar() {
     keycloak.logout();
   };
 
-  console.log(keycloak.authenticated);
-
   if (!keycloak.authenticated) {
     navigate("/");
     window.location.href = "/";
   }
+  const isAdmin = keycloak.authenticated && keycloak.hasRealmRole("admin");
   const { theme } = useTheme();
   return (
     <div className="Navbar">
@@ -75,12 +74,16 @@ export default function Navbar() {
           <li>
             <Link to="/userpage">Strona główna</Link>
           </li>
-          <li>
-            <Link to="/myclasses">Moje zajęcia</Link>
-          </li>
-          <li>
-            <Link to="/chat">Czat</Link>
-          </li>
+          {!isAdmin && (
+            <li>
+              <Link to="/myclasses">Moje zajęcia</Link>
+            </li>
+          )}
+          {isAdmin && (
+            <li>
+              <Link to="/adminpanel">Panel administratora</Link>
+            </li>
+          )}
         </ul>
         <ul>
           <li>

@@ -8,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 
 import MyPage from "./components/UserPageComponents/Profile/MyPage";
 
-import Chat from "./components/UserPageComponents/Chat/Chat";
-
 import PrivateRoute from "./helpers/PrivateRoute";
+import AdminPanel from "./components/Admin/AdminPage";
+import AdminRoute from "./helpers/AdminRoute";
 
 function App() {
   const navigate = useNavigate();
@@ -60,13 +60,14 @@ function App() {
         }
       />
       <Route
-        path="/chat"
+        path="/adminpanel"
         element={
-          <PrivateRoute>
-            <Chat />
-          </PrivateRoute>
+          <AdminRoute>
+            <AdminPanel />
+          </AdminRoute>
         }
       />
+
       <Route
         path="/whops"
         element={

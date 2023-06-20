@@ -5,10 +5,21 @@ import SignToClass from "./UserFunctions/SignToClass";
 import UnSignFromClass from "./UserFunctions/UnSign";
 import Comments from "./Comments/Comments";
 import { useState } from "react";
+import { useKeycloak } from "@react-keycloak/web";
 
 // import Chat from "../Chat/Chatt";
 
 export default function Class({ obj, role }) {
+  const { keycloak } = useKeycloak();
+  const admin_edit_buttons = (
+    <>
+      {window.location.pathname === "/adminpanel" && (
+        <div className="   space-x-3">
+          <Delete id={obj.id} />
+        </div>
+      )}
+    </>
+  );
   const trainer_edit_buttons = (
     <>
       {window.location.pathname === "/myclasses" && (
@@ -100,6 +111,7 @@ export default function Class({ obj, role }) {
       <div className="flex justify-between">
         {role === "trainer" && trainer_edit_buttons}
         {role === "user" && participant_edit_buttons}
+        {keycloak.hasRealmRole("admin") && admin_edit_buttons}
       </div>
     </div>
   );
