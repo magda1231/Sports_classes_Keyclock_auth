@@ -22,6 +22,8 @@ Odpalenie frontendu:
 
 `cd frontned`
 
+`npm install`
+
 `npm start`
 
 Frontend ma działać na porcie 3000
