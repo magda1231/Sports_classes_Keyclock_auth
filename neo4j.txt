@@ -1,0 +1,17 @@
+CREATE (p:User{username:"ala", password:"ala", role:"user", id:"123", email:"ala@gmail.com"}) RETURN p;
+CREATE (p:User{username:"trainer", password:"trainer", role:"ur", id:"1234", email:"trainer@gmail.com"}) RETURN p;
+CREATE (p:User{username:"admin", password:"admin", role:"ur", id:"1235", email:"admin@gmail.com"}) RETURN p;
+
+MATCH (u:User {username: "trainer"})
+CREATE (u)-[:CREATED]->(c:Class
+                        {id: "123",
+                          name: "zadania",
+                          city: "gdansk",
+                          place: "miejsce",
+                          time: "12:30",
+                          date: "02-02-2024",
+                          description: "opis",
+                          price: "1",
+                          category: "kat",
+                          maxPeople: "5"}
+                          ) RETURN c
